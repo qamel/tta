@@ -10,7 +10,7 @@ var app = express();
 // Import the TTA game file.
 var tta = require('./ttagame');
 
-var port = 3700;
+var port = Number(process.env.PORT || 3700);
 
 // Create a simple Express application
 
