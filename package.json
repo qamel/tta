@@ -1,0 +1,11 @@
+{
+    "name" : "TimeTravelAdventure",
+    "description" : "Time Travel Adventure Multiplayer Board Game",
+    "version" : "0.1.0",
+    "private" : true,
+    "dependencies": {
+        "express": "latest",
+        "socket.io": "latest"
+    }    
+}
+
