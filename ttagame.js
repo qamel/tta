@@ -1,5 +1,6 @@
 var io;
 var gameSocket;
+var playerData = [];
 
 /**
  * This function is called by index.js to initialize a new game instance.
@@ -50,5 +51,9 @@ function playerJoinsGame(data) {
 
     // Emit the player's data back to the clients in the game room.
     console.log("player joins game: " + data.name);
+
+    playerData.push({ name: data.name, water: 0, wood: 0, wool: 0, food: 0, people: 0, gold: 0, scrap_metal: 0, fuel: 0, rubber: 0, chemicals: 0, plastic: 0, chronotons: 0 });
+
     io.sockets.emit('playerJoinsGame', data);
+    io.sockets.emit('resourceData', playerData);
 }

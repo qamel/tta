@@ -49,6 +49,43 @@ window.onload = function() {
         }
     })
 
+    socket.on('resourceData', function (data) {
+        if (data) {
+
+            var tbody = $('#playerResourcesTable tbody'),
+                props = ["name", "water", "wood", "wool", "food", "people", "gold", "scrap_metal", "fuel", "rubber", "chemicals", "plastic", "chronotons"];
+            // $.each(data, function(i, playerResources) {
+            //   var tr = $('<tr>');
+            //   $.each(props, function(i, prop) {
+            //     $('<th>').html(prop).appendTo(tr);  
+            //     $('<td>').html(playerResources[prop]).appendTo(tr);  
+            //   });
+            //   tbody.append(tr);
+            // });
+
+            $.each(props, function(i, prop) {
+                var tr = $('<tr>');
+                var capitalized = prop.charAt(0).toUpperCase() + prop.substring(1);
+                if (capitalized == "Scrap_metal")
+                {
+                    capitalized = "Scrap Metal";
+                }
+                $('<th>').html(capitalized).appendTo(tr);  
+                $.each(data, function(i, playerResources) {
+                    $('<td>').html(playerResources[prop]).appendTo(tr);  
+                });
+                tbody.append(tr);
+            });
+
+            //var index;
+            //for (index = 0; index < data.length; ++index){
+            //    log(data[index].name + " has " + data[index].wood + " wood!");
+            //}
+        } else {
+            console.log("There is a problem:", data);
+        }
+    })
+
     joinGameButton.onclick = function(){
         socket.emit('playerJoinsGame', { name: playerName.value });
     }
