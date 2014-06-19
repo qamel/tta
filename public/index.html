@@ -13,49 +13,253 @@
 <body>
     <div id="gameArea">
         <!-- This is where the templates defined below will be used -->
-        <div id="container" style="width:100%; height:900px;"></div>
-        <button id="button" style="position:absolute; left:10px; top:50px;" class="btn btn-primary">Rotate Time Ring</button>   
-        <button id="button2" style="position:absolute; left:10px; top:85px;" class="btn btn-primary">Rotate Knowledge Ring</button>   
-        <button id="button3" style="position:absolute; left:10px; top:120px;" class="btn btn-primary">Rotate Obstacle 1 Ring</button>   
-        <button id="button4" style="position:absolute; left:10px; top:155px;" class="btn btn-primary">Rotate Obstacle 2 Ring</button>   
-        <button id="button5" style="position:absolute; left:10px; top:190px;" class="btn btn-primary">Rotate Obstacle 3 Ring</button>   
-        <button id="button6" style="position:absolute; left:10px; top:225px;" class="btn btn-primary">Rotate Artifact Ring</button>   
+        <div id="container" style="position:absolute; top: 25px; left: 600px; width: 900px; height:900px;"></div>
 
-
-        <ul id="mytab" style="position:absolute; left:10px; top:275px;" class="nav nav-tabs">
-          <li class="active"><a href="#resources" data-toggle="tab">Resources</a></li>
-          <li><a href="#tools" data-toggle="tab">Tools</a></li>
-          <li><a href="#messages" data-toggle="tab">Something</a></li>
-          <li><a href="#settings" data-toggle="tab">Something</a></li>
-        </ul>
-
-        <div class="tab-content" style="position:absolute; left:10px; top:320px;">
-            <div class="tab-pane active" id="resources">
-                <table class="table table-striped">
-                    <tr>
-                        <td>Player</td>
-                        <td>Water</td>
-                        <td>Fuel</td>
-                        <td>Scrap Metal</td>
-                    </tr>
-                    <tr>
-                        <td>Travis</td>
-                        <td>0</td>
-                        <td>4</td>
-                        <td>3</td>
-                    </tr> 
-                    <tr>
-                        <td>Brian</td>
-                        <td>2</td>
-                        <td>5</td>
-                        <td>1</td>
-                    </tr>
-                </table>    
+        <div class="panel panel-primary" style="position:absolute; left:10px; top:10px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Board Actions</h3>
             </div>
-          <div class="tab-pane" id="tools">...2</div>
-          <div class="tab-pane" id="messages">...3</div>
-          <div class="tab-pane" id="settings">...4</div>
+            <div class="panel-body">
+                <h4>Ring Rotation</h4>
+                <p>
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-default">
+                        <input type="radio" name="options" id="option1"> Time
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="options" id="option2"> Knowledge
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="options" id="option3"> Obstacle 1
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="options" id="option4"> Obstacle 2
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="options" id="option5"> Obstacle 3
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" name="options" id="option6"> Artifacts
+                    </label>
+                </div></p>
+
+                <p>
+                    <button type="button" class="btn btn-primary">Rotate CW</button>  
+                    <button type="button2" class="btn btn-primary">Rotate CCW</button> 
+                </p> 
+
+                <h4>Paradox Token Placement</h4>
+                
+                <p>
+                    <button type="addParadoxTokenButton" class="btn btn-primary">Add Paradox Token</button>  
+                    <button type="removeParadoxTokenButton" class="btn btn-primary">Remove Paradox Token</button> 
+                </p> 
+
+
+
+            </div>
         </div>
+
+        <div class="panel panel-success" style="position:absolute; left:10px; top:300px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Player Actions</h3>
+            </div>
+            <div class="panel-body">
+                <h4>Dice Roll</h4>
+
+                <p>
+                    <button type="rolld6Button" class="btn btn-success">Roll d6</button>  
+                    <button type="rolld10Button" class="btn btn-success">Roll d10</button> 
+                </p> 
+
+                <h4>Draw Cards</h4>
+
+                <p>
+                    <button type="drawDeviceCard" class="btn btn-success">Draw Device Card</button>  
+                    <button type="drawParadoxCard" class="btn btn-success">Draw Paradox Card</button> 
+                </p> 
+            </div>
+        </div>
+
+        <div class="panel panel-info" style="position:absolute; left:10px; top:550px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Player Info and Actions</h3>
+            </div>
+            <div class="panel-body">
+                <h4>Player Data</h4>
+
+                <p>
+                    <ul id="mytab" class="nav nav-tabs">
+                        <li class="active"><a href="#resources" data-toggle="tab">Resources</a></li>
+                        <li><a href="#tools" data-toggle="tab">Tools</a></li>
+                        <li><a href="#messages" data-toggle="tab">Devices</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="resources">
+                            <table class="table table-striped">
+                                <tr>
+                                    <td>Player</td>
+                                    <td>Water</td>
+                                    <td>Fuel</td>
+                                    <td>Scrap Metal</td>
+                                </tr>
+                                <tr>
+                                    <td>Travis</td>
+                                    <td>0</td>
+                                    <td>4</td>
+                                    <td>3</td>
+                                </tr> 
+                                <tr>
+                                    <td>Brian</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                </tr>
+                            </table>    
+                        </div>
+                      <div class="tab-pane" id="tools">...2</div>
+                      <div class="tab-pane" id="messages">...3</div>
+                    </div>
+                </p> 
+
+            </div>
+        </div>
+
+        <div class="panel panel-warning" style="position:absolute; left:1500px; top:10px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Game Info and Actions</h3>
+            </div>
+            <div class="panel-body">
+                <h4>Player Data</h4>
+
+                <p>
+                    <ul id="mytab" class="nav nav-tabs">
+                        <li class="active"><a href="#resources2" data-toggle="tab">Resources</a></li>
+                        <li><a href="#tools2" data-toggle="tab">Devices</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="resources2">
+                            <table class="table table-striped">
+                                <tr>
+                                    <td>Resource</td>
+                                    <td>Travis</td>
+                                    <td>Josh</td>
+                                    <td>Brian</td>
+                                </tr>
+                                <tr>
+                                    <td>Water</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                </tr> 
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                </tr>
+                            </table>    
+                        </div>
+                      <div class="tab-pane" id="tools2">...2</div>
+                    </div>
+                </p> 
+
+            </div>
+        </div>
+
+        <div class="panel panel-danger" style="position:absolute; left:1500px; top:675px;">
+            <div class="panel-heading">
+                <h3 class="panel-title">Paradox and Doom Actions</h3>
+            </div>
+            <div class="panel-body">
+                <h4>Dice Roll</h4>
+
+                <p>
+                    <button type="rolld6Button" class="btn btn-success">Roll d6</button>  
+                    <button type="rolld10Button" class="btn btn-success">Roll d10</button> 
+                </p> 
+
+                <h4>Draw Cards</h4>
+
+                <p>
+                    <button type="drawDeviceCard" class="btn btn-success">Draw Device Card</button>  
+                    <button type="drawParadoxCard" class="btn btn-success">Draw Paradox Card</button> 
+                </p> 
+            </div>
+        </div>
+
+
+<!--         <button id="button" style="position:absolute; left:1500px; top:500px;" class="btn btn-primary">Rotate Time Ring</button>   
+        <button id="button2" style="position:absolute; left:1500px; top:85px;" class="btn btn-primary">Rotate Knowledge Ring</button>   
+        <button id="button3" style="position:absolute; left:1500px; top:120px;" class="btn btn-primary">Rotate Obstacle 1 Ring</button>   
+        <button id="button4" style="position:absolute; left:1500px; top:155px;" class="btn btn-primary">Rotate Obstacle 2 Ring</button>   
+        <button id="button5" style="position:absolute; left:1500px; top:190px;" class="btn btn-primary">Rotate Obstacle 3 Ring</button>   
+        <button id="button6" style="position:absolute; left:1500px; top:225px;" class="btn btn-primary">Rotate Artifact Ring</button>    -->
+
+
+        
 
     </div>
 
