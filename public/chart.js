@@ -113,9 +113,7 @@ $(function () {
         { name: '#1', y: 1.0, color: '#9768D1' },
         { name: '#2', y: 1.0, color: '#7B52AB' },
         { name: '#3', y: 1.0, color: '#553285' },
-        { name: '#4', y: 1.0, color: '#36175E' },
-        { name: '#5', y: 1.0, color: '#25064D' },
-        { name: '#6', y: 1.0, color: '#110324' }
+        { name: '#4', y: 1.0, color: '#36175E' }
     ];
 
     // Create the chart
