@@ -85,7 +85,7 @@ window.onload = function() {
 
     sendButton6.onclick = function() {
         var currentAngle = chart.series[6].options.startAngle;
-        var currentAngle = currentAngle + 15;
+        var currentAngle = currentAngle + 45;
         if (currentAngle > 359)
         {
                 currentAngle = 0;
