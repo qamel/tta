@@ -112,7 +112,7 @@ $(function () {
     var artifactData = [
         { name: '#1', y: 1.0, color: '#9768D1' },
         { name: '#2', y: 1.0, color: '#7B52AB' },
-        { name: '#3', y: 1.0, color: '#553285' )
+        { name: '#3', y: 1.0, color: '#553285' }
         //{ name: '#4', y: 1.0, color: '#36175E' }
     ];
 
