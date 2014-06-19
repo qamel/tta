@@ -6,63 +6,187 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="http://code.highcharts.com/highcharts.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-
-
 </head>
 
 <body>
     <div id="gameArea">
         <!-- This is where the templates defined below will be used -->
-        <div id="container" style="position:absolute; top: 25px; left: 600px; width: 900px; height:900px;"></div>
+
+        <div class="modal fade" id="myModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Time Travel Adventure</h4>
+              </div>
+              <div class="modal-body">
+                <p>Would you like to join the game?  There are currently x players in the game.</p>
+              
+                <form class="form-horizontal" role="form">
+                  <div class="form-group">
+                    <label for="playerName" class="col-sm-2 control-label">Name</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" id="playerName" placeholder="Name">
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <div class="modal-footer">
+                <button id="joinGameButton" type="button" class="btn btn-default" data-dismiss="modal">Join</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <div id="container" style="position:absolute; top: 25px; left: 400px; width: 900px; height:900px;"></div>
 
         <div class="panel panel-primary" style="position:absolute; left:10px; top:10px;">
             <div class="panel-heading">
-                <h3 class="panel-title">Board Actions</h3>
+                <h3 class="panel-title">Player Actions</h3>
             </div>
             <div class="panel-body">
                 <h4>Ring Rotation</h4>
-                <p>
-                <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-default">
-                        <input type="radio" name="options" id="option1"> Time
-                    </label>
-                    <label class="btn btn-default">
-                        <input type="radio" name="options" id="option2"> Knowledge
-                    </label>
-                    <label class="btn btn-default">
-                        <input type="radio" name="options" id="option3"> Obstacle 1
-                    </label>
-                    <label class="btn btn-default">
-                        <input type="radio" name="options" id="option4"> Obstacle 2
-                    </label>
-                    <label class="btn btn-default">
-                        <input type="radio" name="options" id="option5"> Obstacle 3
-                    </label>
-                    <label class="btn btn-default">
-                        <input type="radio" name="options" id="option6"> Artifacts
-                    </label>
-                </div></p>
 
-                <p>
-                    <button type="button" class="btn btn-primary">Rotate CW</button>  
-                    <button type="button2" class="btn btn-primary">Rotate CCW</button> 
-                </p> 
+                <form class="form-inline" role="form">
+                  <div class="form-group">
+                    <select class="form-control">
+                      <option>Time</option>
+                      <option>Knowledge</option>
+                      <option>Obstacle 1</option>
+                      <option>Obstacle 2</option>
+                      <option>Obstacle 3</option>
+                      <option>Artifacts</option>
+                    </select>
+                  </div>
+                  <button type="button" class="btn btn-primary">Rotate CW</button>
+                  <button type="button" class="btn btn-primary">Rotate CCW</button>
+                </form>
 
-                <h4>Paradox Token Placement</h4>
-                
-                <p>
-                    <button type="addParadoxTokenButton" class="btn btn-primary">Add Paradox Token</button>  
-                    <button type="removeParadoxTokenButton" class="btn btn-primary">Remove Paradox Token</button> 
-                </p> 
+                <h4>Move in Time</h4>
 
+                <form class="form-inline" role="form">
+                  <div class="form-group">
+                    <select class="form-control">
+                      <option>0</option>
+                      <option>100</option>
+                      <option>200</option>
+                      <option>300</option>
+                      <option>400</option>
+                      <option>500</option>
+                      <option>600</option>
+                      <option>700</option>
+                      <option>800</option>
+                      <option>900</option>
+                      <option>1000</option>
+                      <option>1100</option>
+                      <option>1200</option>
+                      <option>1300</option>
+                      <option>1400</option>
+                      <option>1500</option>
+                      <option>1600</option>
+                      <option>1700</option>
+                      <option>1800</option>
+                      <option>1900</option>
+                      <option>2000</option>
+                      <option>2100</option>
+                      <option>2200</option>
+                      <option>2300</option>
+                    </select>
+                  </div>
+                  <button type="button" class="btn btn-primary">Move</button>
+                </form>
+
+                <h4>Gather Resources</h4>
+
+
+                <form class="form-inline">
+                  <div class="form-group">
+                    <select class="form-control">
+                      <option>Water</option>
+                      <option>Wood</option>
+                      <option>Wool</option>
+                      <option>Food</option>
+                      <option>People</option>
+                      <option>Gold</option>
+                      <option>Scrap Metal</option>
+                      <option>Fuel</option>
+                      <option>Rubber</option>
+                      <option>Chemicals</option>
+                      <option>Plastic</option>
+                      <option>Chronotons</option>
+                    </select>
+                  </div>
+                  <button type="button" class="btn btn-primary">Add</button>
+                  <button type="button" class="btn btn-primary">Remove</button>
+                </form>
+
+                <h4>Add/Remove Tool</h4>
+
+                <form class="form-inline">
+                  <div class="form-group">
+                    <select class="form-control">
+                      <option>Grappling Hook</option>
+                      <option>Torch</option>
+                      <option>Power</option>
+                      <option>Electronics</option>
+                      <option>Boat</option>
+                      <option>Axe</option>
+                      <option>Gun</option>
+                      <option>Gas Mask</option>
+                      <option>Hearty Meal</option>
+                      <option>Canteen</option>
+                      <option>Money</option>
+                      <option>Repair Tool</option>
+                    </select>
+                  </div>
+                  <button type="button" class="btn btn-primary">Add</button>
+                  <button type="button" class="btn btn-primary">Remove</button>
+                </form>
+
+                <h4>Add/Remove Device</h4>
+
+                <p><button type="drawDeviceCard" class="btn btn-primary">Draw Device Card</button></p>
+
+                <form class="form-inline">
+                  <div class="form-group">
+                    <select class="form-control">
+                      <option>Device 1</option>
+                      <option>Device 2</option>
+                      <option>Device 3</option>
+                      <option>Device 4</option>
+                      <option>Device 5</option>
+                      <option>Device 6</option>
+                      <option>Device 7</option>
+                      <option>Device 8</option>
+                      <option>Device 9</option>
+                      <option>Device 10</option>
+                      <option>Device 11</option>
+                    </select>
+                  </div>
+                  <button type="button" class="btn btn-primary">Add</button>
+                  <button type="button" class="btn btn-primary">Remove</button>
+                </form>
+
+                <h4>Search for Artifact</h4>
+
+                <form class="form-inline" role="form">
+                  <div class="form-group">
+                    <select class="form-control">
+                      <option>Artifact #1</option>
+                      <option>Artifact #2</option>
+                      <option>Artifact #3</option>
+                    </select>
+                  </div>
+                  <button type="button" class="btn btn-primary">Search</button>
+                </form>
 
 
             </div>
         </div>
 
-        <div class="panel panel-success" style="position:absolute; left:10px; top:300px;">
+        <div class="panel panel-success" style="position:absolute; left:10px; top:600px;">
             <div class="panel-heading">
-                <h3 class="panel-title">Player Actions</h3>
+                <h3 class="panel-title">Board Actions</h3>
             </div>
             <div class="panel-body">
                 <h4>Dice Roll</h4>
@@ -72,16 +196,15 @@
                     <button type="rolld10Button" class="btn btn-success">Roll d10</button> 
                 </p> 
 
-                <h4>Draw Cards</h4>
 
-                <p>
-                    <button type="drawDeviceCard" class="btn btn-success">Draw Device Card</button>  
-                    <button type="drawParadoxCard" class="btn btn-success">Draw Paradox Card</button> 
-                </p> 
+                <h4>Console</h4>
+
+                <div id="console" class="well" style="width:333px; height: 100px; overflow: auto;"></div>
+
             </div>
         </div>
 
-        <div class="panel panel-info" style="position:absolute; left:10px; top:550px;">
+<!--         <div class="panel panel-info" style="position:absolute; left:1000px; top:750px;">
             <div class="panel-heading">
                 <h3 class="panel-title">Player Info and Actions</h3>
             </div>
@@ -91,8 +214,8 @@
                 <p>
                     <ul id="mytab" class="nav nav-tabs">
                         <li class="active"><a href="#resources" data-toggle="tab">Resources</a></li>
-                        <li><a href="#tools" data-toggle="tab">Tools</a></li>
-                        <li><a href="#messages" data-toggle="tab">Devices</a></li>
+                        <li><a href="#tools" data-toggle="tab">My Tools</a></li>
+                        <li><a href="#messages" data-toggle="tab">My Devices</a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -124,11 +247,11 @@
                 </p> 
 
             </div>
-        </div>
+        </div> -->
 
-        <div class="panel panel-warning" style="position:absolute; left:1500px; top:10px;">
+        <div class="panel panel-warning" style="position:absolute; left:1350px; top:10px; width:400px">
             <div class="panel-heading">
-                <h3 class="panel-title">Game Info and Actions</h3>
+                <h3 class="panel-title">Game Info</h3>
             </div>
             <div class="panel-body">
                 <h4>Player Data</h4>
@@ -136,22 +259,27 @@
                 <p>
                     <ul id="mytab" class="nav nav-tabs">
                         <li class="active"><a href="#resources2" data-toggle="tab">Resources</a></li>
-                        <li><a href="#tools2" data-toggle="tab">Devices</a></li>
+                        <li><a href="#tools2" data-toggle="tab">Active Devices</a></li>
+                        <li><a href="#tools2" data-toggle="tab">My Cards</a></li>
                     </ul>
 
                     <div class="tab-content">
                         <div class="tab-pane active" id="resources2">
                             <table class="table table-striped">
                                 <tr>
-                                    <td>Resource</td>
-                                    <td>Travis</td>
-                                    <td>Josh</td>
-                                    <td>Brian</td>
+                                    <td></td>
+                                    <td>P1</td>
+                                    <td>P2</td>
+                                    <td>P3</td>
+                                    <td>P4</td>
+                                    <td>P5</td>
                                 </tr>
                                 <tr>
                                     <td>Water</td>
                                     <td>2</td>
                                     <td>5</td>
+                                    <td>1</td>
+                                    <td>1</td>
                                     <td>1</td>
                                 </tr> 
                                 <tr>
@@ -159,10 +287,54 @@
                                     <td>2</td>
                                     <td>5</td>
                                     <td>1</td>
+                                    <td>1</td>
+                                    <td>1</td>
                                 </tr>
                                 <tr>
                                     <td>Wood</td>
                                     <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>5</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Wood</td>
+                                    <td>2</td>
+                                    <td>1</td>
+                                    <td>1</td>
                                     <td>5</td>
                                     <td>1</td>
                                 </tr>
@@ -171,10 +343,14 @@
                                     <td>2</td>
                                     <td>5</td>
                                     <td>1</td>
+                                    <td>1</td>
+                                    <td>1</td>
                                 </tr>
                                 <tr>
                                     <td>Wood</td>
                                     <td>2</td>
+                                    <td>1</td>
+                                    <td>1</td>
                                     <td>5</td>
                                     <td>1</td>
                                 </tr>
@@ -183,40 +359,14 @@
                                     <td>2</td>
                                     <td>5</td>
                                     <td>1</td>
-                                </tr>
-                                <tr>
-                                    <td>Wood</td>
-                                    <td>2</td>
-                                    <td>5</td>
+                                    <td>1</td>
                                     <td>1</td>
                                 </tr>
                                 <tr>
                                     <td>Wood</td>
                                     <td>2</td>
-                                    <td>5</td>
                                     <td>1</td>
-                                </tr>
-                                <tr>
-                                    <td>Wood</td>
-                                    <td>2</td>
-                                    <td>5</td>
                                     <td>1</td>
-                                </tr>
-                                <tr>
-                                    <td>Wood</td>
-                                    <td>2</td>
-                                    <td>5</td>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <td>Wood</td>
-                                    <td>2</td>
-                                    <td>5</td>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <td>Wood</td>
-                                    <td>2</td>
                                     <td>5</td>
                                     <td>1</td>
                                 </tr>
@@ -229,24 +379,32 @@
             </div>
         </div>
 
-        <div class="panel panel-danger" style="position:absolute; left:1500px; top:675px;">
+        <div class="panel panel-danger" style="position:absolute; left:1350px; top:675px; width: 400px">
             <div class="panel-heading">
                 <h3 class="panel-title">Paradox and Doom Actions</h3>
             </div>
             <div class="panel-body">
-                <h4>Dice Roll</h4>
+                <h4>Paradox Tokens</h4>
 
                 <p>
-                    <button type="rolld6Button" class="btn btn-success">Roll d6</button>  
-                    <button type="rolld10Button" class="btn btn-success">Roll d10</button> 
+                    <button class="btn btn-danger">Add Paradox Token</button> 
+                    <button class="btn btn-danger">Remove Paradox Token</button> 
                 </p> 
 
-                <h4>Draw Cards</h4>
+                <h4>Paradoxes</h4>
 
                 <p>
-                    <button type="drawDeviceCard" class="btn btn-success">Draw Device Card</button>  
-                    <button type="drawParadoxCard" class="btn btn-success">Draw Paradox Card</button> 
+                    <button class="btn btn-danger">Add Paradox</button> 
+                    <button class="btn btn-danger">Remove Paradox</button> 
                 </p> 
+
+                <h4>Doom</h4>
+
+                <p>
+                    <button class="btn btn-danger">Increase Doom</button> 
+                    <button class="btn btn-danger">Decrease Doom</button> 
+                </p>
+
             </div>
         </div>
 

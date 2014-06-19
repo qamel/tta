@@ -22,6 +22,7 @@ exports.initGame = function(sio, socket){
     //gameSocket.on('playerJoinGame', playerJoinGame);
     //gameSocket.on('playerAnswer', playerAnswer);
     gameSocket.on('playerRotatesRing', playerRotatesRing);
+    gameSocket.on('playerJoinsGame', playerJoinsGame);
     console.log("Game inited");
 }
 
@@ -42,4 +43,12 @@ function playerRotatesRing(data) {
     // Emit the player's data back to the clients in the game room.
     console.log("smitting ring data");
     io.sockets.emit('playerRotatesRing', data);
+}
+
+function playerJoinsGame(data) {
+    // console.log('Player: ' + data.playerName + ' ready for new game.');
+
+    // Emit the player's data back to the clients in the game room.
+    console.log("player joins game: " + data.name);
+    io.sockets.emit('playerJoinsGame', data);
 }

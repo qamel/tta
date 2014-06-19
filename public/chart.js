@@ -2,6 +2,10 @@ var chart;
 
 $(function () {
 
+    $('#myModal').modal({
+      backdrop: 'static', keyboard: false
+    })
+
     var timeEraData = [
         { name: '0', y: 1.0, color: '#F41C54' },
         { name: '100', y: 1.0, color: '#F41C54' },
