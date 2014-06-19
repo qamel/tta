@@ -104,16 +104,16 @@ $(function () {
         { name: 'Cliff', y: 1.0, color: '#5C0002'},
 
         { name: 'Carnivorous<br/>Vegetation', y: 1.0, color: '#FF1D23' },
-        { name: 'Shark', y: 1.0, color: '#D40D12' },
-        { name: 'Dense Jungle', y: 1.0, color: '#94090D' },
-        { name: 'Enemy Army', y: 1.0, color: '#5C0002' }
+        { name: 'Shark', y: 1.0, color: '#D40D12' }
+        //{ name: 'Dense Jungle', y: 1.0, color: '#94090D' },
+        //{ name: 'Enemy Army', y: 1.0, color: '#5C0002' }
     ];
 
     var artifactData = [
         { name: '#1', y: 1.0, color: '#9768D1' },
         { name: '#2', y: 1.0, color: '#7B52AB' },
-        { name: '#3', y: 1.0, color: '#553285' },
-        { name: '#4', y: 1.0, color: '#36175E' }
+        { name: '#3', y: 1.0, color: '#553285' )
+        //{ name: '#4', y: 1.0, color: '#36175E' }
     ];
 
     // Create the chart
