@@ -5,7 +5,7 @@
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="http://code.highcharts.com/highcharts.js"></script>
-
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 
 
 </head>
@@ -14,12 +14,49 @@
     <div id="gameArea">
         <!-- This is where the templates defined below will be used -->
         <div id="container" style="width:100%; height:900px;"></div>
-        <button id="button" style="position:absolute; left:10px; top:50px;">Rotate Time Ring</button>   
-        <button id="button2" style="position:absolute; left:10px; top:85px;">Rotate Knowledge Ring</button>   
-        <button id="button3" style="position:absolute; left:10px; top:120px;">Rotate Obstacle 1 Ring</button>   
-        <button id="button4" style="position:absolute; left:10px; top:155px;">Rotate Obstacle 2 Ring</button>   
-        <button id="button5" style="position:absolute; left:10px; top:190px;">Rotate Obstacle 3 Ring</button>   
-        <button id="button6" style="position:absolute; left:10px; top:225px;">Rotate Artifact Ring</button>   
+        <button id="button" style="position:absolute; left:10px; top:50px;" class="btn btn-primary">Rotate Time Ring</button>   
+        <button id="button2" style="position:absolute; left:10px; top:85px;" class="btn btn-primary">Rotate Knowledge Ring</button>   
+        <button id="button3" style="position:absolute; left:10px; top:120px;" class="btn btn-primary">Rotate Obstacle 1 Ring</button>   
+        <button id="button4" style="position:absolute; left:10px; top:155px;" class="btn btn-primary">Rotate Obstacle 2 Ring</button>   
+        <button id="button5" style="position:absolute; left:10px; top:190px;" class="btn btn-primary">Rotate Obstacle 3 Ring</button>   
+        <button id="button6" style="position:absolute; left:10px; top:225px;" class="btn btn-primary">Rotate Artifact Ring</button>   
+
+
+        <ul id="mytab" style="position:absolute; left:10px; top:275px;" class="nav nav-tabs">
+          <li class="active"><a href="#resources" data-toggle="tab">Resources</a></li>
+          <li><a href="#tools" data-toggle="tab">Tools</a></li>
+          <li><a href="#messages" data-toggle="tab">Something</a></li>
+          <li><a href="#settings" data-toggle="tab">Something</a></li>
+        </ul>
+
+        <div class="tab-content" style="position:absolute; left:10px; top:320px;">
+            <div class="tab-pane active" id="resources">
+                <table class="table table-striped">
+                    <tr>
+                        <td>Player</td>
+                        <td>Water</td>
+                        <td>Fuel</td>
+                        <td>Scrap Metal</td>
+                    </tr>
+                    <tr>
+                        <td>Travis</td>
+                        <td>0</td>
+                        <td>4</td>
+                        <td>3</td>
+                    </tr> 
+                    <tr>
+                        <td>Brian</td>
+                        <td>2</td>
+                        <td>5</td>
+                        <td>1</td>
+                    </tr>
+                </table>    
+            </div>
+          <div class="tab-pane" id="tools">...2</div>
+          <div class="tab-pane" id="messages">...3</div>
+          <div class="tab-pane" id="settings">...4</div>
+        </div>
+
     </div>
 
     <!-- Main Title Screen that appears when the page loads for the first time -->
@@ -34,6 +71,7 @@
     <!-- app.js is where all the client-side Anagrammatix game logic -->
     <script src="chart.js"></script>
     <script src="app.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
 
 </body>
