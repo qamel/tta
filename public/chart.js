@@ -105,7 +105,7 @@ $(function () {
     var obstacle3Data = [
         { name: 'Mine Field', y: 1.0, color: '#FF1D23' },
         { name: 'Epidemic', y: 1.0, color: '#D40D12' },
-        { name: 'Swampy Swamp', y: 1.0, color: '#94090D' },
+        { name: 'Swampy<br/>Swamp', y: 1.0, color: '#94090D' },
         { name: 'Cliff', y: 1.0, color: '#5C0002'},
 
         { name: 'Carnivorous<br/>Vegetation', y: 1.0, color: '#FF1D23' },

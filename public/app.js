@@ -1,67 +1,57 @@
 window.onload = function() {
 
-    var player = {
-        mySocketId: '',
-        playerName: ''
-    }
-
     var console = document.getElementById("console");
 
     function log(stringValue) {
         console.innerHTML = stringValue + "<br/>" + console.innerHTML;
     };
 
-    //var messages = [];
     var socket = io.connect(window.location.hostname);
-    //var field = document.getElementById("field");
-    //var sendButton = document.getElementById("button");
-    //var sendButton2 = document.getElementById("button2");
-    //var sendButton3 = document.getElementById("button3");
-    //var sendButton4 = document.getElementById("button4");
-    //var sendButton5 = document.getElementById("button5");
-    //var sendButton6 = document.getElementById("button6");
-    var joinGameButton = document.getElementById("joinGameButton");
-    var playerName = document.getElementById("playerName");
-    //var content = document.getElementById("content");
+    var playerName;
+    var playerToken;
 
-    socket.on('playerRotatesRing', function (data) {
-        if (data) {
-            console.log("inrotates ring", data);
-            //messages.push(data.message);
-            //var html = data.ring + ' ' + data.degrees;
-            //content.innerHTML = html;
+    /* *************************************
+     *             Player Joins Game       *
+     * *********************************** */
 
-            chart.series[data.ring].update({
-                startAngle: data.degrees
-            });
+    //<span class="glyphicon glyphicon-star" style="font-size:24px"></span>
 
-        } else {
-            console.log("There is a problem:", data);
-        }
-
+    $("#joinGameButton").click(function(){
+        playerName = $("#playerNameInput").val();
+        socket.emit('playerJoinsGame', { name: playerName });
     });
 
     socket.on('playerJoinsGame', function (data) {
         if (data) {
             log(data.name + " has joined the game.");
         } else {
-            console.log("There is a problem:", data);
+           log("There was a problem with joining the game.");
         }
-    })
+    });
+
+    /* *************************************
+     *             Console Message         *
+     * *********************************** */
+
+    socket.on('consoleMessage', function (data) {
+        if (data) {
+            log(data.message);
+        } else {
+           log("There was a problem with logging to console.");
+        }
+    });
+
+    /* *************************************
+     *             Resources Update        *
+     * *********************************** */
 
     socket.on('resourceData', function (data) {
         if (data) {
 
             var tbody = $('#playerResourcesTable tbody'),
                 props = ["name", "water", "wood", "wool", "food", "people", "gold", "scrap_metal", "fuel", "rubber", "chemicals", "plastic", "chronotons"];
-            // $.each(data, function(i, playerResources) {
-            //   var tr = $('<tr>');
-            //   $.each(props, function(i, prop) {
-            //     $('<th>').html(prop).appendTo(tr);  
-            //     $('<td>').html(playerResources[prop]).appendTo(tr);  
-            //   });
-            //   tbody.append(tr);
-            // });
+
+            $('#playerResourcesTable tbody tr').remove();
 
             $.each(props, function(i, prop) {
                 var tr = $('<tr>');
@@ -70,6 +60,11 @@ window.onload = function() {
                 {
                     capitalized = "Scrap Metal";
                 }
+
+                if (capitalized == "Name")
+                {
+                    capitalized = "";
+                }
                 $('<th>').html(capitalized).appendTo(tr);  
                 $.each(data, function(i, playerResources) {
                     $('<td>').html(playerResources[prop]).appendTo(tr);  
@@ -77,83 +72,170 @@ window.onload = function() {
                 tbody.append(tr);
             });
 
-            //var index;
-            //for (index = 0; index < data.length; ++index){
-            //    log(data[index].name + " has " + data[index].wood + " wood!");
-            //}
         } else {
             console.log("There is a problem:", data);
         }
-    })
+    });
 
-    joinGameButton.onclick = function(){
-        socket.emit('playerJoinsGame', { name: playerName.value });
-    }
 
-    // sendButton.onclick = function() {
-    //     var currentAngle = chart.series[0].options.startAngle;
-    //     var currentAngle = currentAngle + 15;
-    //     if (currentAngle > 359)
-    //     {
-    //             currentAngle = 0;
-    //     }
+    /* *************************************
+     *             Resources Add/Remove        *
+     * *********************************** */
 
-    //     socket.emit('playerRotatesRing', { ring: 0, degrees: currentAngle });
-    //     socket.emit('playerRotatesRing', { ring: 1, degrees: currentAngle });
-    // }
+    $("#addResourceButton").click(function(){
+        var resource = $("#resourceModifySelect").val();
+        var message = playerName + " added one " + resource + ".";
+        socket.emit('consoleMessage', { message: message });
+        socket.emit('resourceModify', { name: playerName, type: resource, count: 1 });
+    });
 
-    // sendButton2.onclick = function() {
-    //     var currentAngle = chart.series[2].options.startAngle;
-    //     var currentAngle = currentAngle + 15;
-    //     if (currentAngle > 359)
-    //     {
-    //             currentAngle = 0;
-    //     }
+    $("#removeResourceButton").click(function(){
+        var resource = $("#resourceModifySelect").val();
+        var message = playerName + " removed one " + resource + ".";
+        socket.emit('consoleMessage', { message: message });
+        socket.emit('resourceModify', { name: playerName, type: resource, count: -1 });
+    });
 
-    //     socket.emit('playerRotatesRing', { ring: 2, degrees: currentAngle });
-    // }
+    /* *************************************
+     *            Ring Rotation            *
+     * *********************************** */
 
-    // sendButton3.onclick = function() {
-    //     var currentAngle = chart.series[3].options.startAngle;
-    //     var currentAngle = currentAngle + 15;
-    //     if (currentAngle > 359)
-    //     {
-    //             currentAngle = 0;
-    //     }
+    socket.on('playerRotatesRing', function (data) {
+        if (data) {
+            chart.series[data.ring].update({
+                startAngle: data.degrees
+            });
 
-    //     socket.emit('playerRotatesRing', { ring: 3, degrees: currentAngle });
-    // }
+        } else {
+            console.log("There is a problem:", data);
+        }
+    });
 
-    // sendButton4.onclick = function() {
-    //     var currentAngle = chart.series[4].options.startAngle;
-    //     var currentAngle = currentAngle + 30;
-    //     if (currentAngle > 359)
-    //     {
-    //             currentAngle = 0;
-    //     }
+    
+    $("#rotateRingCwButton").click(function(){
+        var ringIndex = $( "#timeRingSelect" ).val();
 
-    //     socket.emit('playerRotatesRing', { ring: 4, degrees: currentAngle });
-    // }
+        var addedAngle = 0;
+        if (ringIndex == 0)
+        {
+            addedAngle = 15;
+        }
+        else if (ringIndex == 2)
+        {
+            addedAngle = 15;
+        }
+        else if (ringIndex == 3)
+        {
+            addedAngle = 15;
+        }
+        else if (ringIndex == 4)
+        {
+            addedAngle = 30;
+        }
+        else if (ringIndex == 5)
+        {
+            addedAngle = 60;
+        }
+        else if (ringIndex == 6)
+        {
+            addedAngle = 120;
+        }
 
-    // sendButton5.onclick = function() {
-    //     var currentAngle = chart.series[5].options.startAngle;
-    //     var currentAngle = currentAngle + 60;
-    //     if (currentAngle > 359)
-    //     {
-    //             currentAngle = 0;
-    //     }
+        var currentAngle = chart.series[ringIndex].options.startAngle;
+        var currentAngle = currentAngle + addedAngle;
+        if (currentAngle > 359)
+        {
+             currentAngle = 0;
+        }
 
-    //     socket.emit('playerRotatesRing', { ring: 5, degrees: currentAngle });
-    // }
+        socket.emit('playerRotatesRing', { ring: ringIndex, degrees: currentAngle });
 
-    // sendButton6.onclick = function() {
-    //     var currentAngle = chart.series[6].options.startAngle;
-    //     var currentAngle = currentAngle + 120;
-    //     if (currentAngle > 359)
-    //     {
-    //             currentAngle = 0;
-    //     }
+        if (ringIndex == 0)
+        {
+            //Also rotate the resources ring, if the time ring is rotated
+            socket.emit('playerRotatesRing', { ring: 1, degrees: currentAngle });
+        }
+    });
+    
+    $("#rotateRingCcwButton").click(function(){
+        var ringIndex = $( "#timeRingSelect" ).val();
 
-    //     socket.emit('playerRotatesRing', { ring: 6, degrees: currentAngle });
-    // }
+        var addedAngle = 0;
+        if (ringIndex == 0)
+        {
+            addedAngle = -15;
+        }
+        else if (ringIndex == 2)
+        {
+            addedAngle = -15;
+        }
+        else if (ringIndex == 3)
+        {
+            addedAngle = -15;
+        }
+        else if (ringIndex == 4)
+        {
+            addedAngle = -30;
+        }
+        else if (ringIndex == 5)
+        {
+            addedAngle = -60;
+        }
+        else if (ringIndex == 6)
+        {
+            addedAngle = -120;
+        }
+
+        var currentAngle = chart.series[ringIndex].options.startAngle;
+        var currentAngle = currentAngle + addedAngle;
+        if (currentAngle > 359)
+        {
+             currentAngle = 0;
+        }
+
+        socket.emit('playerRotatesRing', { ring: ringIndex, degrees: currentAngle });
+
+        if (ringIndex == 0)
+        {
+            //Also rotate the resources ring, if the time ring is rotated
+            socket.emit('playerRotatesRing', { ring: 1, degrees: currentAngle });
+        }
+    });
+
+    /* *************************************
+     *             Time Movement           *
+     * *********************************** */
+
+    socket.on('timeMovement', function (data) {
+        if (data) {
+            
+
+
+        } else {
+            log("There was a problem moving in time.");
+        }
+    });
+
+
+    /* *************************************
+     *             Die Rolls               *
+     * *********************************** */
+
+    $("#rolld6Button").click(function(){
+        var roll = Math.floor((Math.random() * 6) + 1);
+        var message = playerName + " rolled d6 : " + roll;
+        socket.emit('consoleMessage', { message: message });
+    });
+
+    $("#rolld10Button").click(function(){
+        var roll = Math.floor((Math.random() * 10) + 1);
+        var message = playerName + " rolled d10 : " + roll;
+        socket.emit('consoleMessage', { message: message });
+    });
+
+    $("#rolld24Button").click(function(){
+        var roll = Math.floor((Math.random() * 24) + 1);
+        var message = playerName + " rolled d24 : " + roll;
+        socket.emit('consoleMessage', { message: message });
+    });
 }

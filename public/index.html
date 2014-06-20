@@ -12,6 +12,33 @@
     <div id="gameArea">
         <!-- This is where the templates defined below will be used -->
 
+        <div id="playerTokens">
+            <div id="time0div">0</div>
+            <div id="time100div">1</div>
+            <div id="time200div">2</div>
+            <div id="time300div">3</div>
+            <div id="time400div">4</div>
+            <div id="time500div">5</div>
+            <div id="time600div">6</div>
+            <div id="time700div">7</div>
+            <div id="time800div">8</div>
+            <div id="time900div">9</div>
+            <div id="time1000div">10</div>
+            <div id="time1100div">11</div>
+            <div id="time1200div">12</div>
+            <div id="time1300div">13</div>
+            <div id="time1400div">14</div>
+            <div id="time1500div">15</div>
+            <div id="time1600div">16</div>
+            <div id="time1700div">17</div>
+            <div id="time1800div">18</div>
+            <div id="time1900div">19</div>
+            <div id="time2000div">20</div>
+            <div id="time2100div">21</div>
+            <div id="time2200div">22</div>
+            <div id="time2300div">23</div>
+        </div>
+
         <div class="modal fade" id="myModal">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -25,7 +52,7 @@
                   <div class="form-group">
                     <label for="playerName" class="col-sm-2 control-label">Name</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" id="playerName" placeholder="Name">
+                      <input type="text" class="form-control" id="playerNameInput" placeholder="Name" maxLength="6">
                     </div>
                   </div>
                 </form>
@@ -38,7 +65,7 @@
           </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
-        <div id="container" style="position:absolute; top: 25px; left: 400px; width: 900px; height:900px;"></div>
+        <div id="container" style="position:absolute; top: 25px; left: 415px; width: 900px; height:900px;"></div>
 
         <div class="panel panel-primary" style="position:absolute; left:10px; top:10px;">
             <div class="panel-heading">
@@ -49,17 +76,17 @@
 
                 <form class="form-inline" role="form">
                   <div class="form-group">
-                    <select class="form-control">
-                      <option>Time</option>
-                      <option>Knowledge</option>
-                      <option>Obstacle 1</option>
-                      <option>Obstacle 2</option>
-                      <option>Obstacle 3</option>
-                      <option>Artifacts</option>
+                    <select id="timeRingSelect" class="form-control">
+                      <option value="0">Time</option>
+                      <option value="2">Knowledge</option>
+                      <option value="3">Obstacle 1</option>
+                      <option value="4">Obstacle 2</option>
+                      <option value="5">Obstacle 3</option>
+                      <option value="6">Artifacts</option>
                     </select>
                   </div>
-                  <button type="button" class="btn btn-primary">Rotate CW</button>
-                  <button type="button" class="btn btn-primary">Rotate CCW</button>
+                  <button id="rotateRingCwButton" type="button" class="btn btn-primary">Rotate CW</button>
+                  <button id="rotateRingCcwButton" type="button" class="btn btn-primary">Rotate CCW</button>
                 </form>
 
                 <h4>Move in Time</h4>
@@ -101,23 +128,23 @@
 
                 <form class="form-inline">
                   <div class="form-group">
-                    <select class="form-control">
-                      <option>Water</option>
-                      <option>Wood</option>
-                      <option>Wool</option>
-                      <option>Food</option>
-                      <option>People</option>
-                      <option>Gold</option>
-                      <option>Scrap Metal</option>
-                      <option>Fuel</option>
-                      <option>Rubber</option>
-                      <option>Chemicals</option>
-                      <option>Plastic</option>
-                      <option>Chronotons</option>
+                    <select id="resourceModifySelect" class="form-control">
+                      <option value="water">Water</option>
+                      <option value="wood">Wood</option>
+                      <option value="wool">Wool</option>
+                      <option value="food">Food</option>
+                      <option value="people">People</option>
+                      <option value="gold">Gold</option>
+                      <option value="scrap_metal">Scrap Metal</option>
+                      <option value="fuel">Fuel</option>
+                      <option value="rubber">Rubber</option>
+                      <option value="chemicals">Chemicals</option>
+                      <option value="plastic">Plastic</option>
+                      <option value="chronotons">Chronotons</option>
                     </select>
                   </div>
-                  <button type="button" class="btn btn-primary">Add</button>
-                  <button type="button" class="btn btn-primary">Remove</button>
+                  <button id="addResourceButton" type="button" class="btn btn-primary">Add</button>
+                  <button id="removeResourceButton" type="button" class="btn btn-primary">Remove</button>
                 </form>
 
                 <h4>Add/Remove Tool</h4>
@@ -192,8 +219,9 @@
                 <h4>Dice Roll</h4>
 
                 <p>
-                    <button type="rolld6Button" class="btn btn-success">Roll d6</button>  
-                    <button type="rolld10Button" class="btn btn-success">Roll d10</button> 
+                    <button id="rolld6Button" class="btn btn-success">Roll d6</button>  
+                    <button id="rolld10Button" class="btn btn-success">Roll d10</button> 
+                    <button id="rolld24Button" class="btn btn-success">Roll d24</button> 
                 </p> 
 
 
@@ -249,7 +277,7 @@
             </div>
         </div> -->
 
-        <div class="panel panel-warning" style="position:absolute; left:1350px; top:10px; width:350px">
+        <div class="panel panel-warning" style="position:absolute; left:1350px; top:10px; width:400px">
             <div class="panel-heading">
                 <h3 class="panel-title">Game Info</h3>
             </div>
@@ -265,24 +293,7 @@
 
                     <div class="tab-content">
                         <div class="tab-pane active" id="resources2">
-                            <table class="table table-striped" id="playerResourcesTable" style="display: inline-table">
-<!--                                 <thead>
-                                    <tr>
-                                        <th>Player</th>
-                                        <th>Water</th>
-                                        <th>Wood</th>
-                                        <th>Wool</th>
-                                        <th>Food</th>
-                                        <th>People</th>
-                                        <th>Gold<th>
-                                        <th>Scrap Metal</th>
-                                        <th>Fuel</th>
-                                        <th>Rubber</th>
-                                        <th>Chemicals</th>
-                                        <th>Plastic</th>
-                                        <th>Chronotons</th>
-                                    </tr>
-                                </thead> -->
+                            <table class="table table-striped" id="playerResourcesTable" style="width:100px">
                                 <tbody align="center">
                                 </tbody>
                             </table>    
