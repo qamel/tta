@@ -151,29 +151,29 @@
 
                 <form class="form-inline">
                   <div class="form-group">
-                    <select class="form-control">
-                      <option>Grappling Hook</option>
-                      <option>Torch</option>
-                      <option>Power</option>
-                      <option>Electronics</option>
-                      <option>Boat</option>
-                      <option>Axe</option>
-                      <option>Gun</option>
-                      <option>Gas Mask</option>
-                      <option>Hearty Meal</option>
-                      <option>Canteen</option>
-                      <option>Money</option>
-                      <option>Repair Tool</option>
+                    <select id="toolAddSelect" class="form-control">
+                      <option value="Grappling Hook">Grappling Hook</option>
+                      <option value="Torch">Torch</option>
+                      <option value="Power">Power</option>
+                      <option value="Electronics">Electronics</option>
+                      <option value="Boat">Boat</option>
+                      <option value="Axe">Axe</option>
+                      <option value="Gun">Gun</option>
+                      <option value="Gas Mask">Gas Mask</option>
+                      <option value="Hearty Meal">Hearty Meal</option>
+                      <option value="Canteen">Canteen</option>
+                      <option value="Money">Money</option>
+                      <option value="Repair Tool">Repair Tool</option>
                     </select>
                   </div>
-                  <button type="button" class="btn btn-primary">Add</button>
-                  <button type="button" class="btn btn-primary">Remove</button>
+                  <button id="addToolButton" type="button" class="btn btn-primary">Add</button>
+                  <button id="removeToolButton" type="button" class="btn btn-primary">Remove</button>
                 </form>
 
                 <h4>Add/Remove Device</h4>
 
                 <p><button type="drawDeviceCard" class="btn btn-primary">Draw Device Card</button></p>
-
+                <p><button type="drawDeviceCard" class="btn btn-primary">Draw Device From Discard Top</button></p>
                 <form class="form-inline">
                   <div class="form-group">
                     <select class="form-control">
@@ -286,19 +286,27 @@
 
                 <p>
                     <ul id="mytab" class="nav nav-tabs">
-                        <li class="active"><a href="#resources2" data-toggle="tab">Resources</a></li>
-                        <li><a href="#tools2" data-toggle="tab">Active Devices</a></li>
-                        <li><a href="#tools2" data-toggle="tab">My Cards</a></li>
+                        <li class="active"><a href="#resourcesTab" data-toggle="tab">Resources</a></li>
+                        <li><a href="#myCardsTab" data-toggle="tab">My Cards</a></li>
+                        <li><a href="#activeDevicesTab" data-toggle="tab">Active Devices</a></li>
                     </ul>
 
                     <div class="tab-content">
-                        <div class="tab-pane active" id="resources2">
+                        <div class="tab-pane active" id="resourcesTab">
                             <table class="table table-striped" id="playerResourcesTable" style="width:100px">
                                 <tbody align="center">
                                 </tbody>
                             </table>    
                         </div>
-                      <div class="tab-pane" id="tools2">...2</div>
+                        <div class="tab-pane" id="myCardsTab">
+                            <table class="table table-striped" id="myCardsTable" style="width:300px">
+                                <tbody align="center">
+                                </tbody>
+                            </table>    
+                        </div>
+                        <div class="tab-pane" id="activeDevicesTab">
+
+                        </div>
                     </div>
                 </p> 
 

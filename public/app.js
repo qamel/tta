@@ -10,6 +10,8 @@ window.onload = function() {
     var playerName;
     var playerToken;
 
+    var playerHand = [];
+
     /* *************************************
      *             Player Joins Game       *
      * *********************************** */
@@ -232,6 +234,48 @@ window.onload = function() {
         socket.emit('playerMoves', { name: playerName, time: timeEra, ringAngle: chart.series[0].options.startAngle });
     });
 
+
+    /* *************************************
+     *             Tool Card               *
+     * *********************************** */
+
+    $("#addToolButton").click(function(){
+        var tool = $( "#toolAddSelect" ).val();
+
+        //Add tool to player's hand object
+        playerHand.push({ card: tool, type: 'Tool' });
+
+        //Re-render players hand into table
+        var tbody = $('#myCardsTable tbody'),
+            props = ["card", "type"];
+
+        $('#myCardsTable tbody tr').remove();
+
+
+        var discardButtonCode = '<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></button>';
+        var giveButtonCode = '<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-transfer"></span></button>';
+        var activateButtonCode = '<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-download"></span></button>';
+
+        $.each(playerHand, function(i, card) {
+            var tr = $('<tr>');
+
+            //Add card and type to table
+            $.each(props, function(i, prop) {
+                $('<td>').html(card[prop]).appendTo(tr);  
+            });
+
+            //Add buttons for modification
+            $('<td>').html(discardButtonCode).appendTo(tr);
+            $('<td>').html(giveButtonCode).appendTo(tr);
+
+            if (card.type == "Device")
+            {  
+                $('<td>').html(activateButtonCode).appendTo(tr);  
+            }
+
+            tbody.append(tr);
+        });
+    });
 
     /* *************************************
      *             Die Rolls               *

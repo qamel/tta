@@ -2,34 +2,13 @@ var io;
 var gameSocket;
 var playerData = [];
 var playerLocations = [];
-/*var timeEraMapping = [
-    { position : 0, time : 0 },
-    { position : 1, time : 100 },
-    { position : 2, time : 200 },
-    { position : 3, time : 300 },
-    { position : 4, time : 400 },
-    { position : 5, time : 500 },
-    { position : 6, time : 600 },
-    { position : 7, time : 700 },
-    { position : 8, time : 800 },
-    { position : 9, time : 900 },
-    { position : 10, time : 1000 },
-    { position : 11, time : 1100 },
-    { position : 12, time : 1200 },
-    { position : 13, time : 1300 },
-    { position : 14, time : 1400 },
-    { position : 15, time : 1500 },
-    { position : 16, time : 1600 },
-    { position : 17, time : 1700 },
-    { position : 18, time : 1800 },
-    { position : 19, time : 1900 },
-    { position : 20, time : 2000 },
-    { position : 21, time : 2100 },
-    { position : 22, time : 2200 },
-    { position : 23, time : 2300 }
+var deviceDeck = [
+     'Device 1', 'Device 1', 'Device 2', 'Device 2', 'Device 3', 'Device 3', 'Device 4', 'Device 4', 'Device 5', 'Device 5',
+     'Device 6', 'Device 6', 'Device 6', 'Device 6', 'Device 7', 'Device 7', 'Device 7', 'Device 7',
+     'Device 8', 'Device 8', 'Device 8', 'Device 8', 'Device 9', 'Device 9', 'Device 9', 'Device 9',
+     'Device 10', 'Device 10', 'Device 10', 'Device 10', 'Device 11', 'Device 11', 'Device 11', 'Device 11'
 ];
 
-var timeEraOffset = 0;*/
 
 /**
  * This function is called by index.js to initialize a new game instance.
@@ -57,6 +36,9 @@ exports.initGame = function(sio, socket){
     gameSocket.on('consoleMessage', consoleMessage);
     gameSocket.on('playerMoves', playerMoves);
     console.log("Game inited");
+
+    //Shuffle device deck
+    shuffle(deviceDeck);
 }
 
 
@@ -215,3 +197,8 @@ function playerMoves(data) {
     console.log(data.name + " moving to position " + position);
     io.sockets.emit('playerMoves', playerLocations);
 }
+
+function shuffle(o){
+    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+};
