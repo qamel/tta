@@ -12,33 +12,6 @@
     <div id="gameArea">
         <!-- This is where the templates defined below will be used -->
 
-        <div id="playerTokens">
-            <div id="time0div">0</div>
-            <div id="time100div">1</div>
-            <div id="time200div">2</div>
-            <div id="time300div">3</div>
-            <div id="time400div">4</div>
-            <div id="time500div">5</div>
-            <div id="time600div">6</div>
-            <div id="time700div">7</div>
-            <div id="time800div">8</div>
-            <div id="time900div">9</div>
-            <div id="time1000div">10</div>
-            <div id="time1100div">11</div>
-            <div id="time1200div">12</div>
-            <div id="time1300div">13</div>
-            <div id="time1400div">14</div>
-            <div id="time1500div">15</div>
-            <div id="time1600div">16</div>
-            <div id="time1700div">17</div>
-            <div id="time1800div">18</div>
-            <div id="time1900div">19</div>
-            <div id="time2000div">20</div>
-            <div id="time2100div">21</div>
-            <div id="time2200div">22</div>
-            <div id="time2300div">23</div>
-        </div>
-
         <div class="modal fade" id="myModal">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -67,6 +40,33 @@
 
         <div id="container" style="position:absolute; top: 25px; left: 415px; width: 900px; height:900px;"></div>
 
+        <div id="playerTokens">
+            <div id="time0div" style="position:absolute; top: 25px; left: 925px;">0<span class="glyphicon glyphicon-star" style="font-size:14px"></span></div>
+            <div id="time1div" style="position:absolute; top: 50px; left: 1025px;">1</div>
+            <div id="time2div" style="position:absolute; top: 100px; left: 1125px;">2</div>
+            <div id="time3div" style="position:absolute; top: 185px; left: 1215px;">3</div>
+            <div id="time4div" style="position:absolute; top: 300px; left: 1275px;">4</div>
+            <div id="time5div" style="position:absolute; top: 400px; left: 1300px;">5</div>
+            <div id="time6div" style="position:absolute; top: 525px; left: 1300px;">6</div>
+            <div id="time7div" style="position:absolute; top: 625px; left: 1275px;">7</div>
+            <div id="time8div" style="position:absolute; top: 725px; left: 1215px;">8</div>
+            <div id="time9div" style="position:absolute; top: 825px; left: 1125px;">9</div>
+            <div id="time10div" style="position:absolute; top: 875px; left: 1025px;">10</div>
+            <div id="time11div" style="position:absolute; top: 900px; left: 925px;">11</div>
+            <div id="time12div" style="position:absolute; top: 900px; left: 800px;">12</div>
+            <div id="time13div" style="position:absolute; top: 875px; left: 700px;">13</div>
+            <div id="time14div" style="position:absolute; top: 825px; left: 600px;">14</div>
+            <div id="time15div" style="position:absolute; top: 725px; left: 500px;">15</div>
+            <div id="time16div" style="position:absolute; top: 625px; left: 425px;">16</div>
+            <div id="time17div" style="position:absolute; top: 525px; left: 400px;">17</div>
+            <div id="time18div" style="position:absolute; top: 400px; left: 400px;">18</div>
+            <div id="time19div" style="position:absolute; top: 300px; left: 425px;">19</div>
+            <div id="time20div" style="position:absolute; top: 185px; left: 500px;">20</div>
+            <div id="time21div" style="position:absolute; top: 100px; left: 600px;">21</div>
+            <div id="time22div" style="position:absolute; top: 50px; left: 700px;">22</div>
+            <div id="time23div" style="position:absolute; top: 25px; left: 800px;">23</div>
+        </div>
+
         <div class="panel panel-primary" style="position:absolute; left:10px; top:10px;">
             <div class="panel-heading">
                 <h3 class="panel-title">Player Actions</h3>
@@ -93,34 +93,34 @@
 
                 <form class="form-inline" role="form">
                   <div class="form-group">
-                    <select class="form-control">
-                      <option>0</option>
-                      <option>100</option>
-                      <option>200</option>
-                      <option>300</option>
-                      <option>400</option>
-                      <option>500</option>
-                      <option>600</option>
-                      <option>700</option>
-                      <option>800</option>
-                      <option>900</option>
-                      <option>1000</option>
-                      <option>1100</option>
-                      <option>1200</option>
-                      <option>1300</option>
-                      <option>1400</option>
-                      <option>1500</option>
-                      <option>1600</option>
-                      <option>1700</option>
-                      <option>1800</option>
-                      <option>1900</option>
-                      <option>2000</option>
-                      <option>2100</option>
-                      <option>2200</option>
-                      <option>2300</option>
+                    <select id="timeEraMoveSelect" class="form-control">
+                      <option value="0">0</option>
+                      <option value="100">100</option>
+                      <option value="200">200</option>
+                      <option value="300">300</option>
+                      <option value="400">400</option>
+                      <option value="500">500</option>
+                      <option value="600">600</option>
+                      <option value="700">700</option>
+                      <option value="800">800</option>
+                      <option value="900">900</option>
+                      <option value="1000">1000</option>
+                      <option value="1100">1100</option>
+                      <option value="1200">1200</option>
+                      <option value="1300">1300</option>
+                      <option value="1400">1400</option>
+                      <option value="1500">1500</option>
+                      <option value="1600">1600</option>
+                      <option value="1700">1700</option>
+                      <option value="1800">1800</option>
+                      <option value="1900">1900</option>
+                      <option value="2000">2000</option>
+                      <option value="2100">2100</option>
+                      <option value="2200">2200</option>
+                      <option value="2300">2300</option>
                     </select>
                   </div>
-                  <button type="button" class="btn btn-primary">Move</button>
+                  <button id="moveInTimeButton" type="button" class="btn btn-primary">Move</button>
                 </form>
 
                 <h4>Gather Resources</h4>

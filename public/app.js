@@ -187,11 +187,14 @@ window.onload = function() {
         }
 
         var currentAngle = chart.series[ringIndex].options.startAngle;
-        var currentAngle = currentAngle + addedAngle;
-        if (currentAngle > 359)
+
+        if (currentAngle < 1)
         {
-             currentAngle = 0;
+             currentAngle = 360;
         }
+
+        var currentAngle = currentAngle + addedAngle;
+
 
         socket.emit('playerRotatesRing', { ring: ringIndex, degrees: currentAngle });
 
@@ -206,14 +209,27 @@ window.onload = function() {
      *             Time Movement           *
      * *********************************** */
 
-    socket.on('timeMovement', function (data) {
+    socket.on('playerMoves', function (data) {
         if (data) {
-            
+            //Remove player movement tokens
+            $('#playerTokens').find('div').each(function(){
+                $(this).html('');
+            });        
+
+            //Add player movement tokens
+            $.each(data, function(i, playerMove) {
+                $('#time' + playerMove.position + 'div').append(playerMove.name);
+            });
 
 
         } else {
             log("There was a problem moving in time.");
         }
+    });
+
+    $("#moveInTimeButton").click(function(){
+        var timeEra = $( "#timeEraMoveSelect" ).val();
+        socket.emit('playerMoves', { name: playerName, time: timeEra, ringAngle: chart.series[0].options.startAngle });
     });
 
 
