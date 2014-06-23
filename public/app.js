@@ -12,7 +12,7 @@ window.onload = function() {
         { name: 'Device 2', resources: 'Chronoton + Food', description: 'Draw extra resources', type: 'Passive', count: '2' },
         { name: 'Device 3', resources: 'Chronoton + People', description: 'Tools do not discard after use.', type: 'Passive', count: '2' },
         { name: 'Device 4', resources: 'Chronoton + Fuel', description: 'Gain one more action per turn', type: 'Passive', count: '2' },
-        { name: 'Device 5', resources: 'Chronoton + Plastic', description: 'If you draw a card as an action you may take the top card from the device discard pile', type: 'Passive', count: '2' },
+        { name: 'Device 5', resources: 'Chronoton + Plastic', description: 'As an action you may take another players card (their choice)', type: 'Passive', count: '2' },
         { name: 'Device 6', resources: 'Chronoton + Gold', description: 'Rotate ring random ring randomly', type: 'Trap', count: '4' },
         { name: 'Device 7', resources: 'Chronoton + Rubber', description: 'Time Travel other player', type: 'Trap', count: '4' },
         { name: 'Device 8', resources: 'Chronoton + Scrap Metal', description: 'Discard a resource', type: 'Trap', count: '4' },
@@ -426,9 +426,9 @@ window.onload = function() {
             playerDropdown = playerDropdown + '</ul>';
 
             //Create Buttons
-            var discardButton = $('<button type="button" class="btn btn-default discardButton"><span class="glyphicon glyphicon-trash"></span></button>');
-            var giveButton = $('<div class="btn-group"><button type="button" class="btn btn-default giveButton dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-transfer"></span></button>' + playerDropdown + '<div class="btn-group">');
-            var activateButton = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-download"></span></button>');
+            var discardButton = $('<button type="button" class="btn btn-warning discardButton"><span class="glyphicon glyphicon-trash"></span></button>');
+            var giveButton = $('<div class="btn-group"><button type="button" class="btn btn-warning giveButton dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-transfer"></span></button>' + playerDropdown + '<div class="btn-group">');
+            var activateButton = $('<button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-download"></span></button>');
 
             //Add buttons for modification
             $('<td>').append(discardButton).appendTo(tr);
