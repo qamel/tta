@@ -8,6 +8,7 @@ var deviceDeck = [
      'Device 8', 'Device 8', 'Device 8', 'Device 8', 'Device 9', 'Device 9', 'Device 9', 'Device 9',
      'Device 10', 'Device 10', 'Device 10', 'Device 10', 'Device 11', 'Device 11', 'Device 11', 'Device 11'
 ];
+var discardDeviceDeck = [];
 
 
 /**
@@ -35,6 +36,8 @@ exports.initGame = function(sio, socket){
     gameSocket.on('resourceModify', playerModifiesResource);
     gameSocket.on('consoleMessage', consoleMessage);
     gameSocket.on('playerMoves', playerMoves);
+    gameSocket.on('playerDrawsDeviceCard', playerDrawsDeviceCard);
+    gameSocket.on('playerDiscardsDeviceCard', playerDiscardsDeviceCard);
     console.log("Game inited");
 
     //Shuffle device deck
@@ -53,70 +56,6 @@ function playerRotatesRing(data) {
 
     // Emit the player's data back to the clients in the game room.
     console.log("smitting ring data");
-
-   /* if (data.ring == 0)
-    {
-        if (data.degrees > 0)
-        {
-            timeEraOffset = timeEraOffset + 1;
-        }
-        else
-        {
-            timeEraOffset = timeEraOffset - 1;
-        }
-
-        console.log("timeoffset: " + timeEraOffset);
-
-        if (timeEraOffset == 24)
-        {
-            timeEraOffset = 0;
-        }
-
-        //Player rotated time ring, so determine position mapping to time mapping
-        if (data.degrees > 0)
-        {
-            //Rotated clockwise
-            var previousTime = 'null';
-            for (var i = 0; i < timeEraMapping.length; i++)
-            {
-                if (previousTime == 'null')
-                {
-                    //First time through loop
-                    previousTime = timeEraMapping[i].time;
-                }
-                else
-                {
-                    var thisTime = timeEraMapping[i].time;
-                    timeEraMapping[i].time = previousTime;
-                    previousTime = thisTime;
-                }
-            }
-
-            timeEraMapping[0].time = previousTime;
-        }
-        else
-        {
-            //Rotated counter clockwise
-            var previousTime = 'null';
-            for (var i = timeEraMapping.length - 1; i < 0; i--)
-            {
-                if (previousTime == 'null')
-                {
-                    //First time through loop
-                    previousTime = timeEraMapping[i].time;
-                }
-                else
-                {
-                    var thisTime = timeEraMapping[i].time;
-                    timeEraMapping[i].time = previousTime;
-                    previousTime = thisTime;
-                }
-            }
-
-            timeEraMapping[timeEraMapping.length - 1].time = previousTime;
-        }
-    }*/
-
 
     io.sockets.emit('playerRotatesRing', data);
 }
@@ -197,6 +136,37 @@ function playerMoves(data) {
     console.log(data.name + " moving to position " + position);
     io.sockets.emit('playerMoves', playerLocations);
 }
+
+function playerDrawsDeviceCard(data) {
+
+    if (deviceDeck.length == 0)
+    {
+        //No cards left in device deck, so shuffle the discard into the main device
+        console.log("shuffling devices from discard");
+
+        //DOESN'T WORK YET
+       // deviceDeck = discardDeviceDeck.slice(0);
+        //discardDeviceDeck = [];
+    }
+
+    var card = deviceDeck.shift();
+    var player = data.player;
+
+    var drawnCard = ({ player: player, card: card });
+    console.log(player + " draws " + card);
+    io.sockets.emit('playerDrawsDeviceCard', drawnCard);
+}
+
+function playerDiscardsDeviceCard(data) {
+    console.log("player discarded " + data.name);
+    discardDeviceDeck.push(data.name);
+}
+
+/* *****************************
+   *                           *
+   *     HELPER FUNCTIONS      *
+   *                           *
+   ***************************** */
 
 function shuffle(o){
     for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);

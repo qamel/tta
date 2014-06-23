@@ -1,16 +1,26 @@
 window.onload = function() {
 
     var console = document.getElementById("console");
-
-    function log(stringValue) {
-        console.innerHTML = stringValue + "<br/>" + console.innerHTML;
-    };
-
     var socket = io.connect(window.location.hostname);
     var playerName;
     var playerToken;
 
     var playerHand = [];
+    var deviceDeck = [
+        { name: 'Device 1', resources: 'Chronoton + Wool', description: '+1 to Resource Die', type: 'Passive', count: '2' },
+        { name: 'Device 2', resources: 'Chronoton + Food', description: 'Draw extra resources', type: 'Passive', count: '2' },
+        { name: 'Device 3', resources: 'Chronoton + People', description: 'Tools do not discard after use.', type: 'Passive', count: '2' },
+        { name: 'Device 4', resources: 'Chronoton + Fuel', description: 'Gain one more action per turn', type: 'Passive', count: '2' },
+        { name: 'Device 5', resources: 'Chronoton + Plastic', description: 'If you draw a card as an action you may take the top card from the device discard pile', type: 'Passive', count: '2' },
+        { name: 'Device 6', resources: 'Chronoton + Gold', description: 'Rotate ring random ring randomly', type: 'Trap', count: '4' },
+        { name: 'Device 7', resources: 'Chronoton + Rubber', description: 'Time Travel other player', type: 'Trap', count: '4' },
+        { name: 'Device 8', resources: 'Chronoton + Scrap Metal', description: 'Discard a resource', type: 'Trap', count: '4' },
+        { name: 'Device 9', resources: 'Chronoton + Chemicals', description: 'Discard a device card (either in hand or on board as passive)', type: 'Trap', count: '4' },
+        { name: 'Device 10', resources: 'Chronoton + Water', description: 'Makes a player discard a tool', type: 'Trap', count: '4' },
+        { name: 'Device 11', resources: 'Chronoton + Wood', description: 'Block obstacle', type: 'Trap', count: '4' }
+    ];
+
+
 
     /* *************************************
      *             Player Joins Game       *
@@ -244,38 +254,31 @@ window.onload = function() {
 
         //Add tool to player's hand object
         playerHand.push({ card: tool, type: 'Tool' });
-
-        //Re-render players hand into table
-        var tbody = $('#myCardsTable tbody'),
-            props = ["card", "type"];
-
-        $('#myCardsTable tbody tr').remove();
-
-
-        var discardButtonCode = '<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></button>';
-        var giveButtonCode = '<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-transfer"></span></button>';
-        var activateButtonCode = '<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-download"></span></button>';
-
-        $.each(playerHand, function(i, card) {
-            var tr = $('<tr>');
-
-            //Add card and type to table
-            $.each(props, function(i, prop) {
-                $('<td>').html(card[prop]).appendTo(tr);  
-            });
-
-            //Add buttons for modification
-            $('<td>').html(discardButtonCode).appendTo(tr);
-            $('<td>').html(giveButtonCode).appendTo(tr);
-
-            if (card.type == "Device")
-            {  
-                $('<td>').html(activateButtonCode).appendTo(tr);  
-            }
-
-            tbody.append(tr);
-        });
+        renderCardTable();
     });
+
+
+    /* *************************************
+     *             Device Cards            *
+     * *********************************** */
+
+     //DRAWING
+    $("#drawDeviceCard").click(function(){
+        socket.emit('playerDrawsDeviceCard', { player: playerName });
+    });
+
+    socket.on('playerDrawsDeviceCard', function (data) {
+        if (data.player == playerName)
+        {
+            playerHand.push({ card: data.card, type: 'Device' });
+            renderCardTable();
+        }
+    });
+
+    //DISCARDING
+    // $("#drawDeviceCard").click(function(){
+    //     socket.emit('playerDiscardsDeviceCard', { player: playerName });
+    // });
 
     /* *************************************
      *             Die Rolls               *
@@ -298,4 +301,93 @@ window.onload = function() {
         var message = playerName + " rolled d24 : " + roll;
         socket.emit('consoleMessage', { message: message });
     });
+
+
+
+    /* *************************************
+     *             Dynamic Events          *
+     * *********************************** */
+
+    //Give buttons onclick event
+    $("#myCardsTable").on("click", '.discardButton', function(e) {
+        alert("This works");
+    });
+
+    // $("#myCardsTable").on("mouseover", 'tr', function(e) {
+    //     alert("This works");
+    // });
+
+    /* *************************************
+     *             Helper Methods          *
+     * *********************************** */
+
+    function log(stringValue) {
+        console.innerHTML = stringValue + "<br/>" + console.innerHTML;
+    };
+
+    function renderCardTable() {
+        //Re-render players hand into table
+        var tbody = $('#myCardsTable tbody'),
+            props = ["card", "type"];
+
+        $('#myCardsTable tbody tr').remove();
+
+        var count = 0;
+        $.each(playerHand, function(i, card) {
+            var tr = $('<tr>');
+
+            //Add card and type to table
+            $.each(props, function(i, prop) {
+                var propertyCell = $('<td data-toggle="tooltip" data-placement="left" data-container="body" data-html="true" style="vertical-align:middle">');
+
+                propertyCell.html(card[prop]).appendTo(tr);  
+
+                if (prop == "card")
+                {
+                    //Add tooltips
+                    var tooltipText = "";
+                    $.each(deviceDeck, function(i, device)
+                    {
+                        if (device.name == card[prop])
+                        {
+                            tooltipText = "<b>Description:</b> " + device.description;
+                            tooltipText = tooltipText + "<br/><b>Resources:</b> " + device.resources;
+                            tooltipText = tooltipText + "<br/><b>Type:</b> " + device.type;
+                        }
+                    });
+                    propertyCell.attr('data-original-title', tooltipText);
+                }
+            });
+
+            //Create Buttons
+            var discardButton = $('<button type="button" class="btn btn-default discardButton"><span class="glyphicon glyphicon-trash"></span></button>');
+            var giveButton = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-transfer"></span></button>');
+            var activateButton = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-download"></span></button>');
+
+            //Add buttons for modification
+            $('<td>').append(discardButton).appendTo(tr);
+            $('<td>').append(giveButton).appendTo(tr);
+
+            if (card.type == "Device")
+            {  
+                $('<td>').append(activateButton).appendTo(tr);  
+            }
+            else
+            {
+                //empty td
+                 $('<td>').appendTo(tr);  
+            }
+
+            //Give buttons ids
+            discardButton.attr('id', 'discardButton' + count);
+            giveButton.attr('id', 'giveButton' + count);
+            activateButton.attr('id', 'activateButton' + count);
+
+            tbody.append(tr);
+
+            count = count + 1;
+        });
+
+        $("[data-toggle='tooltip']").tooltip();
+    };
 }
