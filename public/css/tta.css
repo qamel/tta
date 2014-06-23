@@ -3,3 +3,7 @@
     max-width: 300px;
     width: 300px;
 }
+
+.dropdown-menu {
+  min-width: 0px;
+}

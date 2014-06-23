@@ -9,6 +9,7 @@ var deviceDeck = [
      'Device 10', 'Device 10', 'Device 10', 'Device 10', 'Device 11', 'Device 11', 'Device 11', 'Device 11'
 ];
 var discardDeviceDeck = [];
+var players = [];
 
 
 /**
@@ -38,6 +39,7 @@ exports.initGame = function(sio, socket){
     gameSocket.on('playerMoves', playerMoves);
     gameSocket.on('playerDrawsDeviceCard', playerDrawsDeviceCard);
     gameSocket.on('playerDiscardsDeviceCard', playerDiscardsDeviceCard);
+    gameSocket.on('playerGivesCard', playerGivesCard);
     console.log("Game inited");
 
     //Shuffle device deck
@@ -68,9 +70,9 @@ function playerJoinsGame(data) {
 
     playerData.push({ name: data.name, water: 0, wood: 0, wool: 0, food: 0, people: 0, gold: 0, scrap_metal: 0, fuel: 0, rubber: 0, chemicals: 0, plastic: 0, chronotons: 0 });
     playerLocations.push({ name: data.name, position: 0 });
+    players.push(data.name);
 
-
-    io.sockets.emit('playerJoinsGame', data);
+    io.sockets.emit('playerJoinsGame', players);
     io.sockets.emit('resourceData', playerData);
     io.sockets.emit('playerMoves', playerLocations);
 }
@@ -144,8 +146,15 @@ function playerDrawsDeviceCard(data) {
         //No cards left in device deck, so shuffle the discard into the main device
         console.log("shuffling devices from discard");
 
+        for (var i = 0; i < discardDeviceDeck.length; i++)
+        {
+            var card = discardDeviceDeck.shift();
+            deviceDeck.push(card);
+            shuffle(deviceDeck);
+        }
+
         //DOESN'T WORK YET
-       // deviceDeck = discardDeviceDeck.slice(0);
+        //deviceDeck = $.extend(true, [], discardDeviceDeck);
         //discardDeviceDeck = [];
     }
 
@@ -160,6 +169,11 @@ function playerDrawsDeviceCard(data) {
 function playerDiscardsDeviceCard(data) {
     console.log("player discarded " + data.name);
     discardDeviceDeck.push(data.name);
+}
+
+function playerGivesCard(data) {
+    console.log(data.fromPlayer + " gave " + data.name + " to " + data.toPlayer);
+    io.sockets.emit('playerGivesCard', data);
 }
 
 /* *****************************

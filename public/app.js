@@ -4,6 +4,7 @@ window.onload = function() {
     var socket = io.connect(window.location.hostname);
     var playerName;
     var playerToken;
+    var players = [];
 
     var playerHand = [];
     var deviceDeck = [
@@ -31,12 +32,18 @@ window.onload = function() {
     $("#joinGameButton").click(function(){
         playerName = $("#playerNameInput").val();
         socket.emit('playerJoinsGame', { name: playerName });
+        socket.emit('consoleMessage', { message: playerName + ' joined the game.' });
     });
 
     socket.on('playerJoinsGame', function (data) {
         if (data) {
-            log(data.name + " has joined the game.");
-        } else {
+            //log(data.name + " has joined the game.");
+
+            players = data;
+
+           //log("There was a problem with joining the game.");
+        }
+        else {
            log("There was a problem with joining the game.");
         }
     });
@@ -232,8 +239,6 @@ window.onload = function() {
             $.each(data, function(i, playerMove) {
                 $('#time' + playerMove.position + 'div').append(playerMove.name);
             });
-
-
         } else {
             log("There was a problem moving in time.");
         }
@@ -255,6 +260,8 @@ window.onload = function() {
         //Add tool to player's hand object
         playerHand.push({ card: tool, type: 'Tool' });
         renderCardTable();
+
+        socket.emit('consoleMessage', { message: playerName + ' created a ' + tool + ' tool.' });
     });
 
 
@@ -265,6 +272,7 @@ window.onload = function() {
      //DRAWING
     $("#drawDeviceCard").click(function(){
         socket.emit('playerDrawsDeviceCard', { player: playerName });
+        socket.emit('consoleMessage', { message: playerName + ' drew a device.' });
     });
 
     socket.on('playerDrawsDeviceCard', function (data) {
@@ -279,6 +287,18 @@ window.onload = function() {
     // $("#drawDeviceCard").click(function(){
     //     socket.emit('playerDiscardsDeviceCard', { player: playerName });
     // });
+
+    /* *************************************
+     *             Giving Cards            *
+     * *********************************** */
+
+    socket.on('playerGivesCard', function (data) {
+        if (data.toPlayer == playerName)
+        {
+            playerHand.push({ card: data.name, type: data.type });
+            renderCardTable();
+        }
+    });
 
     /* *************************************
      *             Die Rolls               *
@@ -310,7 +330,41 @@ window.onload = function() {
 
     //Give buttons onclick event
     $("#myCardsTable").on("click", '.discardButton', function(e) {
-        alert("This works");
+        var cardId = this.id.replace('discardButton', '');
+
+        //Remove card from hand
+        var card = playerHand[cardId];
+
+        if (card.type == "Device")
+        {
+            //Send it back to the server
+            socket.emit('playerDiscardsDeviceCard', { name: card.card });
+        }
+
+        playerHand.splice(cardId, 1);
+
+        //Re-render
+        renderCardTable();
+    });
+
+    $("#myCardsTable").on("click", '.giveButtonLink', function(e) {
+        var cardIdAndPlayer = this.id.replace('giveButtonLink', '');
+        var index = cardIdAndPlayer.indexOf("_");
+        var cardId = cardIdAndPlayer.substring(0, index);
+        var toPlayer = cardIdAndPlayer.substring(index + 1);
+
+        //Get card
+        var card = playerHand[cardId];
+
+        //Send it to the server
+        socket.emit('playerGivesCard', { name: card.card, type: card.type, fromPlayer: playerName, toPlayer: toPlayer });
+        socket.emit('consoleMessage', { message: playerName + ' gave a card to ' + toPlayer });
+
+        //Remove card from players hand
+        playerHand.splice(cardId, 1);
+
+        //Re-render
+        renderCardTable();
     });
 
     // $("#myCardsTable").on("mouseover", 'tr', function(e) {
@@ -359,9 +413,21 @@ window.onload = function() {
                 }
             });
 
+            //Create give player menu drop down
+            var playerDropdown = '<ul class="dropdown-menu" role="menu">';
+
+            $.each(players, function(i, player) {
+                if (player != playerName)
+                {
+                    playerDropdown = playerDropdown + '<li><a class="giveButtonLink" id="giveButtonLink' + count + '_' + player + '" href="#">' + player + '</a></li>';
+                }
+            })
+
+            playerDropdown = playerDropdown + '</ul>';
+
             //Create Buttons
             var discardButton = $('<button type="button" class="btn btn-default discardButton"><span class="glyphicon glyphicon-trash"></span></button>');
-            var giveButton = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-transfer"></span></button>');
+            var giveButton = $('<div class="btn-group"><button type="button" class="btn btn-default giveButton dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-transfer"></span></button>' + playerDropdown + '<div class="btn-group">');
             var activateButton = $('<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-download"></span></button>');
 
             //Add buttons for modification
