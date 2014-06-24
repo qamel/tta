@@ -301,6 +301,15 @@ window.onload = function() {
     });
 
     /* *************************************
+     *             Activate Cards          *
+     * *********************************** */
+
+    socket.on('playerActivatesDevice', function (data) {
+        //Render active devices table with data
+        renderActiveDeviceTable(data);
+    });
+
+    /* *************************************
      *             Die Rolls               *
      * *********************************** */
 
@@ -325,7 +334,7 @@ window.onload = function() {
 
 
     /* *************************************
-     *             Dynamic Events          *
+     *       Dynamic Events - Cards        *
      * *********************************** */
 
     //Give buttons onclick event
@@ -339,6 +348,7 @@ window.onload = function() {
         {
             //Send it back to the server
             socket.emit('playerDiscardsDeviceCard', { name: card.card });
+            socket.emit('consoleMessage', { message: playerName + ' discards ' + card.card });
         }
 
         playerHand.splice(cardId, 1);
@@ -367,9 +377,61 @@ window.onload = function() {
         renderCardTable();
     });
 
+    //Active devices
+    $("#myCardsTable").on("click", '.activateButton', function(e) {
+        var cardId = this.id.replace('activateButton', '');
+
+        //Get card
+        var card = playerHand[cardId];
+
+        //Send it back to the server
+        socket.emit('playerActivatesDevice', { name: card.card, player: playerName });
+        socket.emit('consoleMessage', { message: playerName + ' activates device ' + card.card });
+        
+        //Remove card from hand
+        playerHand.splice(cardId, 1);
+
+        //Re-render
+        renderCardTable();
+    });
+
     // $("#myCardsTable").on("mouseover", 'tr', function(e) {
     //     alert("This works");
     // });
+
+    /* *************************************
+     *   Dynamic Events - Active Devices   *
+     * *********************************** */
+
+    //Give buttons onclick event
+    $("#activeDevicesTable").on("click", '.discardButton', function(e) {
+        var cardId = this.id.replace('discardButton', '');
+
+        //Send it back to the server
+        socket.emit('playerDiscardsActiveDeviceCard', { cardId: cardId });
+        //socket.emit('consoleMessage', { message: playerName + ' discards active ' + card.card });
+ 
+    });
+
+    $("#activeDevicesTable").on("click", '.giveButtonLink', function(e) {
+        var cardIdAndPlayer = this.id.replace('giveButtonLink', '');
+        var index = cardIdAndPlayer.indexOf("_");
+        var cardId = cardIdAndPlayer.substring(0, index);
+        var toPlayer = cardIdAndPlayer.substring(index + 1);
+
+        //Get card
+        //var card = playerHand[cardId];
+
+        //Send it to the server
+        socket.emit('playerGivesActiveDeviceCard', { name: cardId.cardId, fromPlayer: playerName, toPlayer: toPlayer });
+        //socket.emit('consoleMessage', { message: playerName + ' gave a card to ' + toPlayer });
+
+        //Remove card from players hand
+        //playerHand.splice(cardId, 1);
+
+        //Re-render
+        //renderCardTable();
+    });
 
     /* *************************************
      *             Helper Methods          *
@@ -391,6 +453,7 @@ window.onload = function() {
             var tr = $('<tr>');
 
             //Add card and type to table
+            var deviceType = "";
             $.each(props, function(i, prop) {
                 var propertyCell = $('<td data-toggle="tooltip" data-placement="left" data-container="body" data-html="true" style="vertical-align:middle">');
 
@@ -407,6 +470,7 @@ window.onload = function() {
                             tooltipText = "<b>Description:</b> " + device.description;
                             tooltipText = tooltipText + "<br/><b>Resources:</b> " + device.resources;
                             tooltipText = tooltipText + "<br/><b>Type:</b> " + device.type;
+                            deviceType = device.type;
                         }
                     });
                     propertyCell.attr('data-original-title', tooltipText);
@@ -428,7 +492,7 @@ window.onload = function() {
             //Create Buttons
             var discardButton = $('<button type="button" class="btn btn-warning discardButton"><span class="glyphicon glyphicon-trash"></span></button>');
             var giveButton = $('<div class="btn-group"><button type="button" class="btn btn-warning giveButton dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-transfer"></span></button>' + playerDropdown + '<div class="btn-group">');
-            var activateButton = $('<button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-download"></span></button>');
+            var activateButton = $('<button type="button" class="btn btn-warning activateButton"><span class="glyphicon glyphicon-download"></span></button>');
 
             //Add buttons for modification
             $('<td>').append(discardButton).appendTo(tr);
@@ -436,7 +500,15 @@ window.onload = function() {
 
             if (card.type == "Device")
             {  
-                $('<td>').append(activateButton).appendTo(tr);  
+                if (deviceType == "Passive")
+                {
+                    $('<td>').append(activateButton).appendTo(tr);  
+                }
+                else
+                {
+                    //empty td
+                    $('<td>').appendTo(tr);  
+                }
             }
             else
             {
@@ -452,6 +524,72 @@ window.onload = function() {
             tbody.append(tr);
 
             count = count + 1;
+        });
+
+        $("[data-toggle='tooltip']").tooltip();
+    };
+
+    function renderActiveDeviceTable(activeDevices) {
+        //Re-render active devices into table
+        var tbody = $('#activeDevicesTable tbody'),
+            props = ["card", "player"];
+
+        $('#activeDevicesTable tbody tr').remove();
+
+        var count = 0;
+        $.each(activeDevices, function(i, card) {
+            var tr = $('<tr>');
+
+            //Add card and type to table
+            $.each(props, function(i, prop) {
+                var propertyCell = $('<td data-toggle="tooltip" data-placement="left" data-container="body" data-html="true" style="vertical-align:middle">');
+
+                propertyCell.html(card[prop]).appendTo(tr);  
+
+                if (prop == "card")
+                {
+                    //Add tooltips
+                    var tooltipText = "";
+                    $.each(deviceDeck, function(i, device)
+                    {
+                        if (device.name == card[prop])
+                        {
+                            tooltipText = "<b>Description:</b> " + device.description;
+                            tooltipText = tooltipText + "<br/><b>Resources:</b> " + device.resources;
+                        }
+                    });
+                    propertyCell.attr('data-original-title', tooltipText);
+                }
+            });
+
+            //Create give player menu drop down
+            var playerDropdown = '<ul class="dropdown-menu" role="menu">';
+
+            $.each(players, function(i, player) {
+                if (player != playerName)
+                {
+                    playerDropdown = playerDropdown + '<li><a class="giveButtonLink" id="giveButtonLink' + count + '_' + player + '" href="#">' + player + '</a></li>';
+                }
+            })
+
+            playerDropdown = playerDropdown + '</ul>';
+
+            //Create Buttons
+            var discardButton = $('<button type="button" class="btn btn-warning discardButton"><span class="glyphicon glyphicon-trash"></span></button>');
+            var giveButton = $('<div class="btn-group"><button type="button" class="btn btn-warning giveButton dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-transfer"></span></button>' + playerDropdown + '<div class="btn-group">');
+            
+            //Add buttons for modification
+            $('<td>').append(discardButton).appendTo(tr);
+            $('<td>').append(giveButton).appendTo(tr);
+
+            //Give buttons ids
+            discardButton.attr('id', 'discardButton' + count);
+            giveButton.attr('id', 'giveButton' + count);
+
+            tbody.append(tr);
+
+            count = count + 1;
+
         });
 
         $("[data-toggle='tooltip']").tooltip();

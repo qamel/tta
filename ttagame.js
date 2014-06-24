@@ -8,6 +8,7 @@ var deviceDeck = [
      'Device 8', 'Device 8', 'Device 8', 'Device 8', 'Device 9', 'Device 9', 'Device 9', 'Device 9',
      'Device 10', 'Device 10', 'Device 10', 'Device 10', 'Device 11', 'Device 11', 'Device 11', 'Device 11'
 ];
+var activeDevices = [];
 var discardDeviceDeck = [];
 var players = [];
 
@@ -40,6 +41,8 @@ exports.initGame = function(sio, socket){
     gameSocket.on('playerDrawsDeviceCard', playerDrawsDeviceCard);
     gameSocket.on('playerDiscardsDeviceCard', playerDiscardsDeviceCard);
     gameSocket.on('playerGivesCard', playerGivesCard);
+    gameSocket.on('playerActivatesDevice', playerActivatesDevice);
+    gameSocket.on('playerDiscardsActiveDeviceCard', playerDiscardsActiveDeviceCard)
     console.log("Game inited");
 
     //Shuffle device deck
@@ -174,6 +177,27 @@ function playerDiscardsDeviceCard(data) {
 function playerGivesCard(data) {
     console.log(data.fromPlayer + " gave " + data.name + " to " + data.toPlayer);
     io.sockets.emit('playerGivesCard', data);
+}
+
+function playerActivatesDevice(data) {
+    console.log(data.player + " activates " + data.name);
+    activeDevices.push({ card: data.name, player: data.player });
+    io.sockets.emit('playerActivatesDevice', activeDevices);
+}
+
+function playerDiscardsActiveDeviceCard(data) {
+    var card = activeDevices[data.cardId];
+    console.log(card.player + " discarded active " + card.card);
+    consoleMessage({ message: card.player + " discarded active " + card.card });
+
+    //Remove card from active devices
+    activeDevices.splice(data.cardId, 1);
+
+    //Add to discard
+    discardDeviceDeck.push(card.card);
+
+    //Essentially refresh the activated table client-side
+    io.sockets.emit('playerActivatesDevice', activeDevices);
 }
 
 /* *****************************

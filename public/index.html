@@ -225,6 +225,12 @@
                     <button id="rolld24Button" class="btn btn-success">Roll d24</button> 
                 </p> 
 
+                <h4>Obstacle Blocking</h4>
+
+                <p>
+                    <button id="rolld6Button" class="btn btn-success">Block</button>  
+                    <button id="rolld10Button" class="btn btn-success">Unblock</button> 
+                </p> 
 
                 <h4>Console</h4>
 
@@ -249,26 +255,35 @@
 
                     <div class="tab-content">
                         <div class="tab-pane active" id="resourcesTab">
-                            <table class="table table-striped" id="playerResourcesTable" style="width:100px">
+                            <table class="table table-striped" id="playerResourcesTable" style="width:300px">
                                 <tbody align="center">
                                 </tbody>
                             </table>    
                         </div>
                         <div class="tab-pane" id="myCardsTab">
-                            <table class="table table-striped" id="myCardsTable" style="width:375px">
-                                <thead align="center">
-                                  <th>Name</th>
-                                  <th>Type</th>
-                                  <th>Discard</th>
-                                  <th>Give</th>
-                                  <th>Activate</th>
+                            <table class="table table-striped" id="myCardsTable">
+                                <thead>
+                                  <th style="text-align: center;">Name</th>
+                                  <th style="text-align: center;">Type</th>
+                                  <th style="text-align: center;">Discard</th>
+                                  <th style="text-align: center;">Give</th>
+                                  <th style="text-align: center;">Activate</th>
                                 </thead>
                                 <tbody align="center">
                                 </tbody>
                             </table>    
                         </div>
                         <div class="tab-pane" id="activeDevicesTab">
-
+                            <table class="table table-striped" id="activeDevicesTable">
+                                <thead>
+                                  <th style="text-align: center;">Name</th>
+                                  <th style="text-align: center;">Player</th>
+                                  <th style="text-align: center;">Discard</th>
+                                  <th style="text-align: center;">Give</th>
+                                </thead>
+                                <tbody align="center">
+                                </tbody>
+                            </table> 
                         </div>
                     </div>
                 </p> 
@@ -284,8 +299,8 @@
                 <h4>Paradox Tokens</h4>
 
                 <p>
-                    <button class="btn btn-danger">Add Paradox Token</button> 
-                    <button class="btn btn-danger">Remove Paradox Token</button> 
+                    <button class="btn btn-danger">Add Token</button> 
+                    <button class="btn btn-danger">Remove Token</button> 
                 </p> 
 
                 <h4>Paradoxes</h4>
