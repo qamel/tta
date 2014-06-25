@@ -42,7 +42,11 @@ exports.initGame = function(sio, socket){
     gameSocket.on('playerDiscardsDeviceCard', playerDiscardsDeviceCard);
     gameSocket.on('playerGivesCard', playerGivesCard);
     gameSocket.on('playerActivatesDevice', playerActivatesDevice);
-    gameSocket.on('playerDiscardsActiveDeviceCard', playerDiscardsActiveDeviceCard)
+    gameSocket.on('playerDiscardsActiveDeviceCard', playerDiscardsActiveDeviceCard);
+    gameSocket.on('playerAddsBlockToken', playerAddsBlockToken);
+    gameSocket.on('playerAddsParadoxToken', playerAddsParadoxToken);
+    gameSocket.on('playerRemovesBlockToken', playerRemovesBlockToken);
+    gameSocket.on('playerRemovesParadoxToken', playerRemovesParadoxToken);
     console.log("Game inited");
 
     //Shuffle device deck
@@ -198,6 +202,22 @@ function playerDiscardsActiveDeviceCard(data) {
 
     //Essentially refresh the activated table client-side
     io.sockets.emit('playerActivatesDevice', activeDevices);
+}
+
+function playerAddsBlockToken(data) {
+    io.sockets.emit('playerAddsBlockToken', data);
+}
+
+function playerAddsParadoxToken(data) {
+    io.sockets.emit('playerAddsParadoxToken', data);
+}
+
+function playerRemovesBlockToken(data) {
+    io.sockets.emit('playerRemovesBlockToken', data);
+}
+
+function playerRemovesParadoxToken(data) {
+    io.sockets.emit('playerRemovesParadoxToken', data);
 }
 
 /* *****************************

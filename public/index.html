@@ -39,10 +39,10 @@
           </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
-        <div id="container" style="position:absolute; top: 25px; left: 415px; width: 900px; height:900px;"></div>
+        <div id="container" style="position:absolute; top: 35px; left: 415px; width: 900px; height:885px;"></div>
 
         <div id="playerTokens">
-            <div id="time0div" style="position:absolute; top: 25px; left: 925px;">0<span class="glyphicon glyphicon-star" style="font-size:14px"></span></div>
+            <div id="time0div" style="position:absolute; top: 25px; left: 925px;">0</span></div>
             <div id="time1div" style="position:absolute; top: 50px; left: 1025px;">1</div>
             <div id="time2div" style="position:absolute; top: 100px; left: 1125px;">2</div>
             <div id="time3div" style="position:absolute; top: 185px; left: 1215px;">3</div>
@@ -58,10 +58,10 @@
             <div id="time13div" style="position:absolute; top: 875px; left: 700px;">13</div>
             <div id="time14div" style="position:absolute; top: 825px; left: 600px;">14</div>
             <div id="time15div" style="position:absolute; top: 725px; left: 500px;">15</div>
-            <div id="time16div" style="position:absolute; top: 625px; left: 425px;">16</div>
-            <div id="time17div" style="position:absolute; top: 525px; left: 400px;">17</div>
-            <div id="time18div" style="position:absolute; top: 400px; left: 400px;">18</div>
-            <div id="time19div" style="position:absolute; top: 300px; left: 425px;">19</div>
+            <div id="time16div" style="position:absolute; top: 625px; left: 430px;">16</div>
+            <div id="time17div" style="position:absolute; top: 525px; left: 405px;">17</div>
+            <div id="time18div" style="position:absolute; top: 400px; left: 405px;">18</div>
+            <div id="time19div" style="position:absolute; top: 300px; left: 430px;">19</div>
             <div id="time20div" style="position:absolute; top: 185px; left: 500px;">20</div>
             <div id="time21div" style="position:absolute; top: 100px; left: 600px;">21</div>
             <div id="time22div" style="position:absolute; top: 50px; left: 700px;">22</div>
@@ -220,16 +220,16 @@
                 <h4>Dice Roll</h4>
 
                 <p>
-                    <button id="rolld6Button" class="btn btn-success">Roll d6</button>  
-                    <button id="rolld10Button" class="btn btn-success">Roll d10</button> 
-                    <button id="rolld24Button" class="btn btn-success">Roll d24</button> 
+                    <button id="rolld6Button" type="button" class="btn btn-success">Roll d6</button>  
+                    <button id="rolld10Button" type="button" class="btn btn-success">Roll d10</button> 
+                    <button id="rolld24Button" type="button" class="btn btn-success">Roll d24</button> 
                 </p> 
 
-                <h4>Obstacle Blocking</h4>
+                <h4>Obstacle Block Token</h4>
 
                 <p>
-                    <button id="rolld6Button" class="btn btn-success">Block</button>  
-                    <button id="rolld10Button" class="btn btn-success">Unblock</button> 
+                    <button id="addBlockTokenButton" type="button" class="btn btn-success">Add Token</button>  
+                    <button id="removeBlockTokenButton" type="button" class="btn btn-success">Remove Token</button> 
                 </p> 
 
                 <h4>Console</h4>
@@ -279,7 +279,6 @@
                                   <th style="text-align: center;">Name</th>
                                   <th style="text-align: center;">Player</th>
                                   <th style="text-align: center;">Discard</th>
-                                  <th style="text-align: center;">Give</th>
                                 </thead>
                                 <tbody align="center">
                                 </tbody>
@@ -299,8 +298,8 @@
                 <h4>Paradox Tokens</h4>
 
                 <p>
-                    <button class="btn btn-danger">Add Token</button> 
-                    <button class="btn btn-danger">Remove Token</button> 
+                    <button id="addParadoxTokenButton" type="button" class="btn btn-danger">Add Token</button> 
+                    <button id="removeParadoxTokenButton" type="button" class="btn btn-danger">Remove Token</button> 
                 </p> 
 
                 <h4>Paradoxes</h4>

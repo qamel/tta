@@ -12,7 +12,7 @@ window.onload = function() {
         { name: 'Device 2', resources: 'Chronoton + Food', description: 'Draw extra resources', type: 'Passive', count: '2' },
         { name: 'Device 3', resources: 'Chronoton + People', description: 'Tools do not discard after use.', type: 'Passive', count: '2' },
         { name: 'Device 4', resources: 'Chronoton + Fuel', description: 'Gain one more action per turn', type: 'Passive', count: '2' },
-        { name: 'Device 5', resources: 'Chronoton + Plastic', description: 'As an action you may take another players card (their choice)', type: 'Passive', count: '2' },
+        { name: 'Device 5', resources: 'Chronoton + Plastic', description: 'As an action you may take a card from another players hand (their choice)', type: 'Passive', count: '2' },
         { name: 'Device 6', resources: 'Chronoton + Gold', description: 'Rotate ring random ring randomly', type: 'Trap', count: '4' },
         { name: 'Device 7', resources: 'Chronoton + Rubber', description: 'Time Travel other player', type: 'Trap', count: '4' },
         { name: 'Device 8', resources: 'Chronoton + Scrap Metal', description: 'Discard a resource', type: 'Trap', count: '4' },
@@ -331,7 +331,73 @@ window.onload = function() {
         socket.emit('consoleMessage', { message: message });
     });
 
+    /* *************************************
+     *             Block Tokens            *
+     * *********************************** */
 
+    $("#addBlockTokenButton").click(function(){
+        var selectedPoints = chart.getSelectedPoints();
+        if (selectedPoints != null)
+        {
+            socket.emit('playerAddsBlockToken', { id: selectedPoints[0].id });
+            socket.emit('consoleMessage', { message: playerName + ' added a block token.' });
+        }
+    });
+
+    socket.on('playerAddsBlockToken', function (data) {
+        var point = chart.get(data.id);
+        var pointName = point.name + '<span class="glyphicon glyphicon-ban-circle" style="font-size:14px; color: red;">';
+        point.update({ name: pointName });
+    });
+
+    $("#removeBlockTokenButton").click(function(){
+        var selectedPoints = chart.getSelectedPoints();
+        if (selectedPoints != null)
+        {
+            socket.emit('playerRemovesBlockToken', { id: selectedPoints[0].id });
+            socket.emit('consoleMessage', { message: playerName + ' removed a block token.' });
+        }
+    });
+
+    socket.on('playerRemovesBlockToken', function (data) {
+        var point = chart.get(data.id);
+        var pointName = point.name.replace('<span class="glyphicon glyphicon-ban-circle" style="font-size:14px; color: red;">', '');
+        point.update({ name: pointName });
+    });
+
+    /* *************************************
+     *             Paradox Tokens            *
+     * *********************************** */
+
+    $("#addParadoxTokenButton").click(function(){
+        var selectedPoints = chart.getSelectedPoints();
+        if (selectedPoints != null)
+        {
+            socket.emit('playerAddsParadoxToken', { id: selectedPoints[0].id });
+            socket.emit('consoleMessage', { message: playerName + ' added a paradox token.' });
+        }
+    });
+
+    socket.on('playerAddsParadoxToken', function (data) {
+        var point = chart.get(data.id);
+        var pointName = point.name + '<span class="glyphicon glyphicon-flash" style="font-size:14px; color: yellow;">';
+        point.update({ name: pointName });
+    });
+
+    $("#removeParadoxTokenButton").click(function(){
+        var selectedPoints = chart.getSelectedPoints();
+        if (selectedPoints != null)
+        {
+            socket.emit('playerRemovesParadoxToken', { id: selectedPoints[0].id });
+            socket.emit('consoleMessage', { message: playerName + ' removed a paradox token.' });
+        }
+    });
+
+    socket.on('playerRemovesParadoxToken', function (data) {
+        var point = chart.get(data.id);
+        var pointName = point.name.replace('<span class="glyphicon glyphicon-flash" style="font-size:14px; color: yellow;">', '');
+        point.update({ name: pointName });
+    });
 
     /* *************************************
      *       Dynamic Events - Cards        *
@@ -411,26 +477,6 @@ window.onload = function() {
         socket.emit('playerDiscardsActiveDeviceCard', { cardId: cardId });
         //socket.emit('consoleMessage', { message: playerName + ' discards active ' + card.card });
  
-    });
-
-    $("#activeDevicesTable").on("click", '.giveButtonLink', function(e) {
-        var cardIdAndPlayer = this.id.replace('giveButtonLink', '');
-        var index = cardIdAndPlayer.indexOf("_");
-        var cardId = cardIdAndPlayer.substring(0, index);
-        var toPlayer = cardIdAndPlayer.substring(index + 1);
-
-        //Get card
-        //var card = playerHand[cardId];
-
-        //Send it to the server
-        socket.emit('playerGivesActiveDeviceCard', { name: cardId.cardId, fromPlayer: playerName, toPlayer: toPlayer });
-        //socket.emit('consoleMessage', { message: playerName + ' gave a card to ' + toPlayer });
-
-        //Remove card from players hand
-        //playerHand.splice(cardId, 1);
-
-        //Re-render
-        //renderCardTable();
     });
 
     /* *************************************
@@ -562,29 +608,14 @@ window.onload = function() {
                 }
             });
 
-            //Create give player menu drop down
-            var playerDropdown = '<ul class="dropdown-menu" role="menu">';
-
-            $.each(players, function(i, player) {
-                if (player != playerName)
-                {
-                    playerDropdown = playerDropdown + '<li><a class="giveButtonLink" id="giveButtonLink' + count + '_' + player + '" href="#">' + player + '</a></li>';
-                }
-            })
-
-            playerDropdown = playerDropdown + '</ul>';
-
             //Create Buttons
             var discardButton = $('<button type="button" class="btn btn-warning discardButton"><span class="glyphicon glyphicon-trash"></span></button>');
-            var giveButton = $('<div class="btn-group"><button type="button" class="btn btn-warning giveButton dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-transfer"></span></button>' + playerDropdown + '<div class="btn-group">');
-            
+                        
             //Add buttons for modification
             $('<td>').append(discardButton).appendTo(tr);
-            $('<td>').append(giveButton).appendTo(tr);
 
             //Give buttons ids
             discardButton.attr('id', 'discardButton' + count);
-            giveButton.attr('id', 'giveButton' + count);
 
             tbody.append(tr);
 
