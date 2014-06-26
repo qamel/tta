@@ -130,6 +130,9 @@ $(function () {
             type: 'pie',
             renderTo: 'container'
         },
+        credits: {
+            enabled: false
+        },
         title: {
             text: '',
             floating: 'true'

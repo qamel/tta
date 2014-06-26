@@ -199,13 +199,13 @@
 
                 <form class="form-inline" role="form">
                   <div class="form-group">
-                    <select class="form-control">
-                      <option>Artifact #1</option>
-                      <option>Artifact #2</option>
-                      <option>Artifact #3</option>
+                    <select id="artifactSearchSelect" class="form-control">
+                      <option value="1">Artifact #1</option>
+                      <option value="2">Artifact #2</option>
+                      <option value="3">Artifact #3</option>
                     </select>
                   </div>
-                  <button type="button" class="btn btn-primary">Search</button>
+                  <button id="searchArtifactButton" type="button" class="btn btn-primary">Search</button>
                 </form>
 
 
@@ -305,8 +305,18 @@
                 <h4>Paradoxes</h4>
 
                 <p>
-                    <button class="btn btn-danger">Add Paradox</button> 
-                    <button class="btn btn-danger">Remove Paradox</button> 
+                    <button id="drawParadoxButton" type="button"  class="btn btn-danger">Draw Paradox</button> 
+                    <table class="table table-striped" id="paradoxTable">
+                        <thead>
+                          <th style="text-align: center;">Name</th>
+                          <th style="text-align: center;">Type</th>
+                          <th style="text-align: center;">Player</th>
+                          <th style="text-align: center;">Severity</th>
+                          <th style="text-align: center;">Discard</th>
+                        </thead>
+                        <tbody align="center">
+                        </tbody>
+                    </table> 
                 </p> 
 
                 <h4>Doom</h4>

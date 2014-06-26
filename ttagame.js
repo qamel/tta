@@ -8,9 +8,16 @@ var deviceDeck = [
      'Device 8', 'Device 8', 'Device 8', 'Device 8', 'Device 9', 'Device 9', 'Device 9', 'Device 9',
      'Device 10', 'Device 10', 'Device 10', 'Device 10', 'Device 11', 'Device 11', 'Device 11', 'Device 11'
 ];
+var paradoxDeck = [
+     'Paradox 1', 'Paradox 2', 'Paradox 3', 'Paradox 4', 'Paradox 5', 'Paradox 6', 'Paradox 7', 'Paradox 8',
+     'Paradox 9', 'Paradox 10', 'Paradox 11'
+];
+var activeParadoxes = [];
 var activeDevices = [];
 var discardDeviceDeck = [];
+var discardParadoxDeck = [];
 var players = [];
+var artifactId;
 
 
 /**
@@ -47,10 +54,19 @@ exports.initGame = function(sio, socket){
     gameSocket.on('playerAddsParadoxToken', playerAddsParadoxToken);
     gameSocket.on('playerRemovesBlockToken', playerRemovesBlockToken);
     gameSocket.on('playerRemovesParadoxToken', playerRemovesParadoxToken);
+    gameSocket.on('playerChecksForArtifact', playerChecksForArtifact);
+    gameSocket.on('playerDrawsParadoxCard', playerDrawsParadoxCard);
+    gameSocket.on('playerDiscardsParadoxCard', playerDiscardsParadoxCard);
+    gameSocket.on('playerChangesParadoxSeverity', playerChangesParadoxSeverity);
+
     console.log("Game inited");
 
-    //Shuffle device deck
+    artifactId = Math.floor((Math.random() * 3) + 1);
+    console.log("Artifact id is " + artifactId);
+
+    //Shuffle device and paradox deck
     shuffle(deviceDeck);
+    shuffle(paradoxDeck);
 }
 
 
@@ -157,9 +173,9 @@ function playerDrawsDeviceCard(data) {
         {
             var card = discardDeviceDeck.shift();
             deviceDeck.push(card);
-            shuffle(deviceDeck);
         }
 
+        shuffle(deviceDeck);
         //DOESN'T WORK YET
         //deviceDeck = $.extend(true, [], discardDeviceDeck);
         //discardDeviceDeck = [];
@@ -191,8 +207,8 @@ function playerActivatesDevice(data) {
 
 function playerDiscardsActiveDeviceCard(data) {
     var card = activeDevices[data.cardId];
-    console.log(card.player + " discarded active " + card.card);
-    consoleMessage({ message: card.player + " discarded active " + card.card });
+    console.log(data.player + " discarded active " + card.card);
+    consoleMessage({ message: data.player + " discarded active " + card.card });
 
     //Remove card from active devices
     activeDevices.splice(data.cardId, 1);
@@ -219,6 +235,70 @@ function playerRemovesBlockToken(data) {
 function playerRemovesParadoxToken(data) {
     io.sockets.emit('playerRemovesParadoxToken', data);
 }
+
+function playerChecksForArtifact(data) {
+    if (data.artifactId == artifactId)
+    {
+        //io.sockets.emit('playerChecksForArtifact', { result: 'success' });
+        consoleMessage({ message: data.player + " found the Artifact!" });
+    }
+    else
+    {
+        //io.sockets.emit('playerChecksForArtifact', { result: 'fail' });
+        consoleMessage({ message: data.player + " searched and did not find the Artifact..." });
+    }
+}
+
+function playerDrawsParadoxCard(data) {
+
+    if (paradoxDeck.length == 0)
+    {
+        //No cards left in paradox deck, so shuffle the discard into the main deck
+        console.log("shuffling paradoxes from discard");
+
+        for (var i = 0; i < discardParadoxDeck.length; i++)
+        {
+            var card = discardParadoxDeck.shift();
+            paradoxDeck.push(card); 
+        }
+
+        shuffle(paradoxDeck);
+    }
+
+    var card = paradoxDeck.shift();
+    var player = data.player;
+
+    activeParadoxes.push({ player: player, card: card, severity: 1 });
+
+    console.log(player + " draws " + card);
+    io.sockets.emit('playerDrawsParadoxCard', activeParadoxes);
+}
+
+
+function playerDiscardsParadoxCard(data) {
+    var card = activeParadoxes[data.cardId];
+    console.log(data.player + " discarded paradox " + card.card);
+    consoleMessage({ message: data.player + " discarded paradox " + card.card });
+
+    //Remove card from active devices
+    activeParadoxes.splice(data.cardId, 1);
+
+    //Add to discard
+    discardParadoxDeck.push(card.card);
+
+    //Essentially refresh the activated table client-side
+    io.sockets.emit('playerDrawsParadoxCard', activeParadoxes);
+}
+
+function playerChangesParadoxSeverity(data) {
+    activeParadoxes[data.cardId].severity = data.toSeverity;
+    console.log(data.player + " changed sevverity of paradox " + activeParadoxes[data.cardId].card + " to " + data.toSeverity);
+    consoleMessage({ message: data.player + " changed sevverity of paradox " + activeParadoxes[data.cardId].card + " to " + data.toSeverity });
+
+    //Essentially refresh the activated table client-side
+    io.sockets.emit('playerDrawsParadoxCard', activeParadoxes);
+}
+
 
 /* *****************************
    *                           *

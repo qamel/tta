@@ -21,7 +21,21 @@ window.onload = function() {
         { name: 'Device 11', resources: 'Chronoton + Wood', description: 'Block obstacle', type: 'Trap', count: '4' }
     ];
 
-
+    var paradoxDeck = [
+        { name: 'Paradox 1', description: 'Gain X less resources', type: 'A', count: '1', s1: '1', s2: '2', s3: '3', s4: '4', removalMechanic: 'X Resources', resources: 'Chemicals' },
+        { name: 'Paradox 2', description: 'Can only rotate rings X clicks', type: 'A', count: '1', s1: '6', s2: '4', s3: '2', s4: '0', removalMechanic: 'Blind Bid', resources: 'Chronotons (8)' },
+        { name: 'Paradox 3', description: 'Can not X action', type: 'A', count: '1', s1: 'move in time', s2: 'draw device cards', s3: 'craft tools', s4: 'search for artifact', removalMechanic: 'Resources + Die (50%)', resources: 'Wood (5)' },
+        { name: 'Paradox 4', description: 'Start of players turn, they discard X resource', type: 'A', count: '1', s1: '1', s2: '2', s3: '3', s4: '4', removalMechanic: 'X Resources', resources: 'People' },
+        { name: 'Paradox 5', description: 'Start of players turn, rotate X rings.  Clockwise if even, counter if odd.', type: 'B', count: '1', s1: '1', s2: '2', s3: '3', s4: '4', removalMechanic: 'Blind Bid', resources: 'Gold (6)' },
+        { name: 'Paradox 6', description: 'Start of players turn, X paradox tokens appear randomly', type: 'B', count: '1', s1: '1', s2: '2', s3: '3', s4: '4', removalMechanic: 'Resources + Die (50%)', resources: 'Plastic (6)' },
+        { name: 'Paradox 7', description: 'When a player rotates a ring, X additional paradox tokens are placed randomly', type: 'B', count: '1', s1: '1', s2: '2', s3: '3', s4: '4', removalMechanic: 'Blind Bid', resources: 'Fuel (7)' },
+        { name: 'Paradox 8', description: 'Start of players turn, all players choose X cards from players hand randomly to their right and take them', type: 'B', count: '1', s1: '1', s2: '2', s3: '3', s4: '4', removalMechanic: 'Resources + Die (10%)', resources: 'Wool (2)' },
+        { name: 'Paradox 9', description: 'Start of players turn, current player takes X resources from players right', type: 'C', count: '1', s1: '2', s2: '4', s3: '6', s4: '8', removalMechanic: 'Blind Bid', resources: 'Food (8)' },
+        { name: 'Paradox 10', description: 'At the start of the round, place X block tokens randomly on the board.', type: 'C', count: '1', s1: '2', s2: '3', s3: '4', s4: '5', removalMechanic: 'X Resources', resources: 'Water' },
+        { name: 'Paradox 11', description: 'At the start of a round, add the abilities (card text) of X paradoxes to this card in order of their appearance.  These copied abilities are all severity 1 on this paradox.  If another paradox gets removed that this one had copied an ability from, then the copied ability is removed from this paradox. This paradox can only have copied abilities of paradoxs that are in play.', type: 'C', count: '1', s1: '1', s2: '2', s3: '3', s4: '4', removalMechanic: 'Resources + Die (40%)', resources: 'Rubber(5)' },
+        { name: 'Paradox 12', description: 'Crafting tools or devices require X additional resources', type: 'C', count: '1', s1: '1 Gold', s2: '3 Wool', s3: '5 Rubber', s4: '8 Chronotons', removalMechanic: 'X Resources', resources: 'Scrap Metal' },
+        { name: 'Paradox 13', description: 'NULL', type: 'ABC', count: 'NULL', s1: 'NULL', s2: 'NULL', s3: 'NULL', s4: 'NULL', removalMechanic: 'Resources', resources: 'One of Each' },
+    ];
 
     /* *************************************
      *             Player Joins Game       *
@@ -371,7 +385,7 @@ window.onload = function() {
 
     $("#addParadoxTokenButton").click(function(){
         var selectedPoints = chart.getSelectedPoints();
-        if (selectedPoints != null)
+        if (selectedPoints != null || selectedPoints != undefined)
         {
             socket.emit('playerAddsParadoxToken', { id: selectedPoints[0].id });
             socket.emit('consoleMessage', { message: playerName + ' added a paradox token.' });
@@ -397,6 +411,30 @@ window.onload = function() {
         var point = chart.get(data.id);
         var pointName = point.name.replace('<span class="glyphicon glyphicon-flash" style="font-size:14px; color: yellow;">', '');
         point.update({ name: pointName });
+    });
+
+    
+    /* *************************************
+     *          Draw Paradoxes             *
+     * *********************************** */
+
+    $("#drawParadoxButton").click(function(){
+        socket.emit('playerDrawsParadoxCard', { player: playerName });
+        //socket.emit('consoleMessage', { message: playerName + ' drew a paradox.' });
+    });
+
+    socket.on('playerDrawsParadoxCard', function (data) {
+        renderParadoxTable(data);
+    });
+
+    /* *************************************
+     *         Check for Artifact          *
+     * *********************************** */
+
+    $("#searchArtifactButton").click(function(){
+        var artifactId = $( "#artifactSearchSelect" ).val();
+
+        socket.emit('playerChecksForArtifact', { player: playerName, artifactId: artifactId });
     });
 
     /* *************************************
@@ -474,7 +512,32 @@ window.onload = function() {
         var cardId = this.id.replace('discardButton', '');
 
         //Send it back to the server
-        socket.emit('playerDiscardsActiveDeviceCard', { cardId: cardId });
+        socket.emit('playerDiscardsActiveDeviceCard', { cardId: cardId, player: playerName });
+        //socket.emit('consoleMessage', { message: playerName + ' discards active ' + card.card });
+ 
+    });
+
+    /* *************************************
+     *   Dynamic Events - Active Paradoxes   *
+     * *********************************** */
+
+    $("#paradoxTable").on("click", '.discardButton', function(e) {
+        var cardId = this.id.replace('discardButton', '');
+
+        //Send it back to the server
+        socket.emit('playerDiscardsParadoxCard', { cardId: cardId, player: playerName });
+        //socket.emit('consoleMessage', { message: playerName + ' discards active ' + card.card });
+ 
+    });
+
+    $("#paradoxTable").on("click", '.severityButtonLink', function(e) {
+        var cardIdAndSeverity = this.id.replace('severityButtonLink', '');
+        var index = cardIdAndSeverity.indexOf("_");
+        var cardId = cardIdAndSeverity.substring(0, index);
+        var toSeverity = cardIdAndSeverity.substring(index + 1);
+
+        //Send it back to the server
+        socket.emit('playerChangesParadoxSeverity', { cardId: cardId, player: playerName, toSeverity: toSeverity });
         //socket.emit('consoleMessage', { message: playerName + ' discards active ' + card.card });
  
     });
@@ -613,6 +676,95 @@ window.onload = function() {
                         
             //Add buttons for modification
             $('<td>').append(discardButton).appendTo(tr);
+
+            //Give buttons ids
+            discardButton.attr('id', 'discardButton' + count);
+
+            tbody.append(tr);
+
+            count = count + 1;
+
+        });
+
+        $("[data-toggle='tooltip']").tooltip();
+    };
+
+    function renderParadoxTable(activeParadoxes) {
+        //Re-render active devices into table
+        var tbody = $('#paradoxTable tbody'),
+            props = ["card", "player"];
+
+        $('#paradoxTable tbody tr').remove();
+
+        var count = 0;
+        $.each(activeParadoxes, function(i, activeParadox) {
+            var tr = $('<tr>');
+
+            //Add card and type to table
+            var severityNumeral = "I";
+            $.each(props, function(i, prop) {
+                var propertyCell = $('<td data-toggle="tooltip" data-placement="left" data-container="body" data-html="true" style="vertical-align:middle">');
+
+                propertyCell.html(activeParadox[prop]).appendTo(tr);  
+
+                if (prop == "card")
+                {
+                    //Add tooltips
+                    var tooltipText = "";
+                    $.each(paradoxDeck, function(i, paradox)
+                    {
+                        if (paradox.name == activeParadox[prop])
+                        {
+                            //Found paradox card, so create cells for data
+                            //propertyCell.html(paradox.type).appendTo(tr);
+                            $('<td style="vertical-align:middle">').append(paradox.type).appendTo(tr);
+
+                            var paradoxDescription = paradox.description;
+                            if (activeParadox.severity == 1)
+                            {
+                                paradoxDescription = paradoxDescription.replace('X', paradox.s1);
+                                severityNumeral = "I";
+                            }
+                            else if (activeParadox.severity == 2)
+                            {
+                                paradoxDescription = paradoxDescription.replace('X', paradox.s2);
+                                severityNumeral = "II";
+                            }
+                            else if (activeParadox.severity == 3)
+                            {
+                                paradoxDescription = paradoxDescription.replace('X', paradox.s3);
+                                severityNumeral = "III";
+                            }
+                            else if (activeParadox.severity == 4)
+                            {
+                                paradoxDescription = paradoxDescription.replace('X', paradox.s4);
+                                severityNumeral = "IV";
+                            }
+
+                            //Set tooltip
+                            tooltipText = "<b>Description:</b> " + paradoxDescription;
+                            tooltipText = tooltipText + "<br/><b>Removal:</b> " + paradox.removalMechanic;
+                            tooltipText = tooltipText + "<br/><b>Resources:</b> " + paradox.resources;
+
+                        }
+                    });
+                    propertyCell.attr('data-original-title', tooltipText);
+                }
+            });
+
+            //Create Buttons
+            var severityDropdown = '<ul class="dropdown-menu" role="menu">';
+            severityDropdown = severityDropdown + '<li><a class="severityButtonLink" id="severityButtonLink' + count + '_1" href="#">I</a></li>';
+            severityDropdown = severityDropdown + '<li><a class="severityButtonLink" id="severityButtonLink' + count + '_2" href="#">II</a></li>';
+            severityDropdown = severityDropdown + '<li><a class="severityButtonLink" id="severityButtonLink' + count + '_3" href="#">III</a></li>';
+            severityDropdown = severityDropdown + '<li><a class="severityButtonLink" id="severityButtonLink' + count + '_4" href="#">IV</a></li>';
+            severityDropdown = severityDropdown + '</ul>';
+            var severityButton = $('<div class="btn-group"><button type="button" class="btn btn-danger severityButton dropdown-toggle" data-toggle="dropdown">' + severityNumeral +'</button>' + severityDropdown + '<div class="btn-group">');
+            var discardButton = $('<button type="button" class="btn btn-danger discardButton"><span class="glyphicon glyphicon-trash"></span></button>');
+            
+            //Add buttons for modification
+            $('<td style="vertical-align:middle">').append(severityButton).appendTo(tr);
+            $('<td style="vertical-align:middle">').append(discardButton).appendTo(tr);
 
             //Give buttons ids
             discardButton.attr('id', 'discardButton' + count);
