@@ -7,6 +7,33 @@ $(function () {
       backdrop: 'static', keyboard: false
     })
 
+    var obstacles = [
+        { obstacle: 'Castle Wall', tool: 'Grappling Hook', specificTools: 'Grappling Hook', resources: '', ring: 1 },
+        { obstacle: 'Dark Cave', tool: 'Torch', specificTools: 'Torch', resources: '', ring: 1 },
+        { obstacle: 'Razor Wire Fence', tool: 'Axe', specificTools: 'Axe', resources: '', ring: 1 },
+        { obstacle: 'Zombies', tool: 'Shotgun', specificTools: 'Gun', resources: 'Scrap Metal', ring: 1 },
+        { obstacle: 'Starving Village', tool: 'Hearty Meal', specificTools: 'Hearty Meal', resources: '', ring: 1 },
+        { obstacle: 'Pirates', tool: 'Money', specificTools: 'Money', resources: '', ring: 1 },
+        { obstacle: 'Swarm of Bees', tool: 'Bee Suit', specificTools: '', resources: 'Wool + Plastic', ring: 1 },
+        { obstacle: 'Poison Gas Field', tool: 'Gas Mask', specificTools: '', resources: 'Rubber + Plastic + Chemicals', ring: 2 },
+        { obstacle: 'Very Dry Desert', tool: 'Supplies', specificTools: 'Canteen + Hearty Meal', resources: '', ring: 2 },
+        { obstacle: 'Wildfire', tool: 'Lots of Water', specificTools: 'Canteen + Axe', resources: '', ring: 2 },
+        { obstacle: 'Security Door', tool: 'Security Card', specificTools: 'Electronics', resources: 'Plastic', ring: 2 },
+        { obstacle: 'Boulders', tool: 'Dynamite', specificTools: 'Torch', resources: 'Chemicals + Fuel', ring: 2 },
+        { obstacle: 'Rushing River Rapids', tool: 'Kayak', specificTools: 'Boat', resources: 'Plastic', ring: 2 },
+        { obstacle: 'Labyrinth', tool: 'Guide', specificTools: 'Money', resources: 'People', ring: 2 },
+        { obstacle: 'Arctic Tundra', tool: 'Dog Sled', specificTools: 'Money', resources: 'Food', ring: 2 },
+        { obstacle: 'Hurricane', tool: 'Shelter', specificTools: '', resources: 'Wood + Scrap Metal + Wool', ring: 2 },
+        { obstacle: 'Mine Field', tool: 'Metal Detector', specificTools: 'Power + Electronics', resources: 'Scrap Metal', ring: 3 },
+        { obstacle: 'Epidemic', tool: 'First Aid', specificTools: 'Gas Mask', resources: 'Chemicals + Plastic', ring: 3 },
+        { obstacle: 'Swampy Swamp', tool: 'Fanboat', specificTools: 'Boat + Power', resources: 'Scrap Metal', ring: 3 },
+        { obstacle: 'Cliff', tool: 'Zipline', specificTools: 'Grappling Hook + Gun', resources: 'Scrap Metal', ring: 3 },
+        { obstacle: 'Carnivorous Vegetation', tool: 'Flamethrower', specificTools: 'Torch + Gun', resources: 'Chemicals', ring: 3 },
+        { obstacle: 'Shark', tool: 'Speargun', specificTools: 'Gun', resources: 'Scrap Metal + Plastic + Fuel', ring: 3 },
+        { obstacle: 'Dense Jungle', tool: 'Powered Axe', specificTools: 'Axe + Power', resources: 'Fuel', ring: 3 },
+        { obstacle: 'Enemy Army', tool: 'Mercenary', specificTools: 'Money + Gun', resources: 'People', ring: 3 }
+    ];
+
     var timeEraData = [
         { name: '0', y: 1.0, color: '#FF4D6A' },
         { name: '100', y: 1.0, color: '#FF4D6A' },
@@ -143,7 +170,26 @@ $(function () {
             }
         },
         tooltip: {
-            enabled: false
+            formatter: function() {
+                var tooltip = "";
+
+                var obstacleName = this.key;
+                var editObstacleName = obstacleName.replace('<br/>',' ');
+                editObstacleName = obstacleName.replace('<br/>',' ');
+                editObstacleName = obstacleName.replace('<br/>',' ');
+
+                $.each(obstacles, function(i, obstacle) {
+                    if (obstacle.obstacle == editObstacleName)
+                    {
+                        //Found obstacle match
+                        tooltip = '<b>Tool:</b> ' + obstacle.tool;
+                        tooltip = tooltip + '<br/><b>Specific Tools:</b> ' + obstacle.specificTools;
+                        tooltip = tooltip + '<br/><b>Additional Resources:</b> ' + obstacle.resources;
+                    }    
+                });
+
+                return tooltip;
+            }
         },
         plotOptions: {
             pie: {
@@ -168,7 +214,8 @@ $(function () {
                 select: {
                     color: '#FF9494'
                 }
-            }
+            },
+            enableMouseTracking: false
         }, {
             name: 'Resource',
             data: resourceData,
@@ -185,7 +232,8 @@ $(function () {
                 select: {
                     color: '#FF9494'
                 }
-            }
+            },
+            enableMouseTracking: false
         }, {
             name: 'Knowledge',
             data: knowledgeData,
@@ -202,7 +250,8 @@ $(function () {
                 select: {
                     color: '#FF9494'
                 }
-            }
+            },
+            enableMouseTracking: false
         }, {
             name: 'Obstacle1 ',
             data: obstacle1Data,
@@ -269,7 +318,8 @@ $(function () {
                 select: {
                     color: '#FF9494'
                 }
-            }
+            },
+            enableMouseTracking: false
         }]
     });
 });

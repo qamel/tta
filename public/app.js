@@ -438,6 +438,23 @@ window.onload = function() {
     });
 
     /* *************************************
+     *         Doom Manipulation           *
+     * *********************************** */
+
+    $("#increaseDoomButton").click(function(){
+        socket.emit('doomValueChanged', { player: playerName, change: 1 })
+    });
+
+    $("#decreaseDoomButton").click(function(){
+        socket.emit('doomValueChanged', { player: playerName, change: -1 })
+    });
+
+    socket.on('doomValueChanged', function (data) {
+        //Update doom value
+        $("#doomCounter").text(data);
+    });
+
+    /* *************************************
      *       Dynamic Events - Cards        *
      * *********************************** */
 

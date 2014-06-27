@@ -18,6 +18,7 @@ var discardDeviceDeck = [];
 var discardParadoxDeck = [];
 var players = [];
 var artifactId;
+var doomValue = 3;
 
 
 /**
@@ -58,6 +59,7 @@ exports.initGame = function(sio, socket){
     gameSocket.on('playerDrawsParadoxCard', playerDrawsParadoxCard);
     gameSocket.on('playerDiscardsParadoxCard', playerDiscardsParadoxCard);
     gameSocket.on('playerChangesParadoxSeverity', playerChangesParadoxSeverity);
+    gameSocket.on('doomValueChanged', doomValueChanged);
 
     console.log("Game inited");
 
@@ -297,6 +299,14 @@ function playerChangesParadoxSeverity(data) {
 
     //Essentially refresh the activated table client-side
     io.sockets.emit('playerDrawsParadoxCard', activeParadoxes);
+}
+
+function doomValueChanged(data) {
+    doomValue = doomValue + data.change;
+    console.log(data.player + " changed doom to " + doomValue);
+    consoleMessage({ message: data.player + " changed doom to " + doomValue });
+
+    io.sockets.emit('doomValueChanged', doomValue);
 }
 
 
