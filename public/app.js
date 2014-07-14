@@ -327,6 +327,13 @@ window.onload = function() {
      *             Die Rolls               *
      * *********************************** */
 
+    $("#rolld4Button").click(function(){
+        var roll = Math.floor((Math.random() * 4) + 1);
+        var message = playerName + " rolled d4 : " + roll;
+        socket.emit('consoleMessage', { message: message });
+    });
+
+
     $("#rolld6Button").click(function(){
         var roll = Math.floor((Math.random() * 6) + 1);
         var message = playerName + " rolled d6 : " + roll;

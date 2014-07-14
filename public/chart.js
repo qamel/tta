@@ -15,7 +15,7 @@ $(function () {
         { obstacle: 'Starving Village', tool: 'Hearty Meal', specificTools: 'Hearty Meal', resources: '', ring: 1 },
         { obstacle: 'Pirates', tool: 'Money', specificTools: 'Money', resources: '', ring: 1 },
         { obstacle: 'Swarm of Bees', tool: 'Bee Suit', specificTools: '', resources: 'Wool + Plastic', ring: 1 },
-        { obstacle: 'Poison Gas Field', tool: 'Gas Mask', specificTools: '', resources: 'Rubber + Plastic + Chemicals', ring: 2 },
+        { obstacle: 'Poison Gas Field', tool: 'Gas Mask', specificTools: 'Gas Mask', resources: '', ring: 2 },
         { obstacle: 'Very Dry Desert', tool: 'Supplies', specificTools: 'Canteen + Hearty Meal', resources: '', ring: 2 },
         { obstacle: 'Wildfire', tool: 'Lots of Water', specificTools: 'Canteen + Axe', resources: '', ring: 2 },
         { obstacle: 'Security Door', tool: 'Security Card', specificTools: 'Electronics', resources: 'Plastic', ring: 2 },
@@ -79,9 +79,9 @@ $(function () {
      var knowledgeData = [
         { name: 'Past', y: 7.0, color: '#BFBFBF' },
         { name: '<span class="glyphicon glyphicon-record" style="font-size:20px; color: black;">', y: 1.0, color: '#BFBFBF' },
-        { name: 'Present', y: 7.0, color: '#8C8C8C' },
+        { name: 'Present', y: 8.0, color: '#8C8C8C' },
         { name: '<span class="glyphicon glyphicon-record" style="font-size:20px; color: white;">', y: 1.0, color: '#3E403F' },
-        { name: 'Future', y: 8.0, color: '#3E403F' }
+        { name: 'Future', y: 7.0, color: '#3E403F' }
     ];
 
     var obstacle1Data = [
@@ -179,7 +179,7 @@ $(function () {
                 editObstacleName = obstacleName.replace('<br/>',' ');
 
                 $.each(obstacles, function(i, obstacle) {
-                    if (obstacle.obstacle == editObstacleName)
+                    if (editObstacleName.indexOf(obstacle.obstacle) > -1)
                     {
                         //Found obstacle match
                         tooltip = '<b>Tool:</b> ' + obstacle.tool;
