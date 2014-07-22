@@ -9,16 +9,16 @@ window.onload = function() {
     var playerHand = [];
     var deviceDeck = [
         { name: 'Device 1', resources: 'Chronoton + Wool', description: '+1 to Resource Die', type: 'Passive', count: '2' },
-        { name: 'Device 2', resources: 'Chronoton + Food', description: 'Draw extra resources', type: 'Passive', count: '2' },
+        { name: 'Device 2', resources: 'Chronoton + Food', description: 'As an action, you may gather resources a second time in a turn.  This may be a different resource from the first gathering', type: 'Passive', count: '2' },
         { name: 'Device 3', resources: 'Chronoton + People', description: 'Tools do not discard after use.', type: 'Passive', count: '2' },
         { name: 'Device 4', resources: 'Chronoton + Fuel', description: 'Gain one more action per turn', type: 'Passive', count: '2' },
         { name: 'Device 5', resources: 'Chronoton + Plastic', description: 'As an action you may take a card from another players hand (their choice)', type: 'Passive', count: '2' },
-        { name: 'Device 6', resources: 'Chronoton + Gold', description: 'Rotate ring random ring randomly', type: 'Trap', count: '4' },
-        { name: 'Device 7', resources: 'Chronoton + Rubber', description: 'Time Travel other player', type: 'Trap', count: '4' },
-        { name: 'Device 8', resources: 'Chronoton + Scrap Metal', description: 'Discard a resource', type: 'Trap', count: '4' },
-        { name: 'Device 9', resources: 'Chronoton + Chemicals', description: 'Discard a device card (either in hand or on board as passive)', type: 'Trap', count: '4' },
-        { name: 'Device 10', resources: 'Chronoton + Water', description: 'Makes a player discard a tool', type: 'Trap', count: '4' },
-        { name: 'Device 11', resources: 'Chronoton + Wood', description: 'Block obstacle', type: 'Trap', count: '4' }
+        { name: 'Device 6', resources: 'Chronoton + Gold', description: 'Rotate a random ring randomly', type: 'Trap', count: '4' },
+        { name: 'Device 7', resources: 'Chronoton + Rubber', description: 'Time Travel any player to the time of era of your choosing.', type: 'Trap', count: '4' },
+        { name: 'Device 8', resources: 'Chronoton + Scrap Metal', description: 'Player discards X resources based on die roll of that players choosing', type: 'Trap', count: '4' },
+        { name: 'Device 9', resources: 'Chronoton + Chemicals', description: 'Player discards a device card (either in hand or on board as passive) of that players choosing', type: 'Trap', count: '4' },
+        { name: 'Device 10', resources: 'Chronoton + Water', description: 'Player discard a tool of that players choosing', type: 'Trap', count: '4' },
+        { name: 'Device 11', resources: 'Chronoton + Wood', description: 'Block an obstacle of your choosing.', type: 'Trap', count: '4' }
     ];
 
     var paradoxDeck = [
